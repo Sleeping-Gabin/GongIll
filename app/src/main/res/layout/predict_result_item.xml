@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner2"
+    android:backgroundTint="?attr/colorSecondaryContainer"
+    android:layout_marginVertical="8dp">
+    <TextView
+        android:id="@+id/predictItem_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="15dp"
+        android:paddingHorizontal="20dp"
+        android:textSize="16sp"/>
+</LinearLayout>

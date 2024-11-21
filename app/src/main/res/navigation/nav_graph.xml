@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/scheduleFragment">
+    <fragment
+        android:id="@+id/groupFragment"
+        android:name="com.example.myapplication.view.ui.GroupFragment"
+        android:label="GroupFragment"
+        tools:layout="@layout/group_fragment">
+        <action
+            android:id="@+id/action_groupFragment_to_groupItemFragment"
+            app:destination="@id/groupItemFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/rankFragment"
+        android:name="com.example.myapplication.view.ui.RankFragment"
+        android:label="RankFragment"
+        tools:layout="@layout/rank_fragment">
+        <action
+            android:id="@+id/action_rankFragment_to_teamFragment"
+            app:destination="@id/teamFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_rankFragment_to_predictFragment"
+            app:destination="@id/predictFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.example.myapplication.view.ui.ScheduleFragment"
+        android:label="ScheduleFragment"
+        tools:layout="@layout/schedule_fragment">
+        <action
+            android:id="@+id/action_scheduleFragment_to_playFragment"
+            app:destination="@id/playFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/playFragment"
+        android:name="com.example.myapplication.view.ui.PlayFragment"
+        android:label="PlayFragment"
+        tools:layout="@layout/play_fragment">
+    </fragment>
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="com.example.myapplication.view.ui.TeamFragment"
+        android:label="TeamFragment"
+        tools:layout="@layout/team_fragment"/>
+    <fragment
+        android:id="@+id/groupItemFragment"
+        android:name="com.example.myapplication.view.ui.GroupDetailFragment"
+        android:label="GroupItemFragment" >
+        <action
+            android:id="@+id/action_groupItemFragment_to_teamFragment"
+            app:destination="@id/teamFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/predictFragment"
+        android:name="com.example.myapplication.view.ui.PredictFragment"
+        android:label="PredictFragment">
+        <argument
+            android:name="team"
+            app:argType="string" />
+        <argument
+            android:name="rank"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_predictFragment_to_predictResultFragment"
+            app:destination="@id/predictResultFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@id/rankFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/predictResultFragment"
+        android:name="com.example.myapplication.view.ui.PredictResultFragment"
+        android:label="PredictResultFragment">
+        <argument
+            android:name="predictResult"
+            app:argType="com.example.myapplication.objects.PredictResult" />
+        <argument
+            android:name="team"
+            app:argType="string" />
+        <argument
+            android:name="rank"
+            app:argType="integer" />
+    </fragment>
+</navigation>

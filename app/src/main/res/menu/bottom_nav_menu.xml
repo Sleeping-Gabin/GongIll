@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/scheduleFragment"
+        android:enabled="true"
+        android:title="@string/title_schedule"
+        android:icon="@drawable/event_note"/>
+    <item
+        android:id="@+id/rankFragment"
+        android:enabled="true"
+        android:title="@string/title_team"
+        android:icon="@drawable/emoji_events"/>
+    <item
+        android:id="@+id/groupFragment"
+        android:enabled="true"
+        android:title="@string/title_group"
+        android:icon="@drawable/groups"/>
+</menu>
