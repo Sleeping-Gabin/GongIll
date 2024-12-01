@@ -34,13 +34,14 @@
     <string name="textField_team">팀</string>
     <string name="title_result">결과</string>
     <string name="predictResult">%1$s VS %2$s : %3$s 승리</string>
-    <string name="predict_check">아래 상황에서 %1$s팀이 %2$d위 안에 들 수 있습니다.</string>
-    <string name="predict_check_rnd">아래 상황에서 라운드 승점에 따라 %1$s팀이 %2$d위 안에 들 수 있습니다.</string>
-    <string name="predict_reverse_check">아래 상황이 아니라면 %1$s팀이 %2$d위 안에 들 가능성이 있습니다.\n라운드 비교가 필요한 상황을 확인하세요.</string>
-    <string name="predict_win">아래 상황에서 %1$s팀이 %2$d위 안에 들 수 있습니다.</string>
-    <string name="predict_reverse_win">아래 상황이 아니라면 %1$s팀이 %2$d위 안에 들 수 있습니다.</string>
-    <string name="predict_rnd">아래 상황에서 라운드 승점에 따라 %1$s팀이 %2$d위 안에 들 수 있습니다.\n나머지 상황에서는 불가능합니다.</string>
-    <string name="predict_reverse_rnd">아래 상황에서 라운드 승점에 따라 %1$s팀이 %2$d위 안에 들 수 있습니다.\n나머지 상황에서 항상 가능합니다.</string>
-    <string name="predict_reverse_null">%1$s팀은 확정적으로 %2$d위 안에 들 수 있습니다.</string>
-    <string name="predict_null">%1$s팀은 %2$d위 안에 들 수 없습니다.</string>
+    <string name="predict_check">%1$d가지 상황에서 %2$s팀이 %3$d위 안에 들 수 있습니다.</string>
+    <string name="predict_check_rnd">%1$d가지 상황에서 라운드 승점에 따라 %2$s팀이 %3$d위 안에 들 수 있습니다.</string>
+    <string name="predict_reverse_check">아래 %1$d가지 상황에서는 %2$s팀이 %3$d위 안에 들 수 없습니다.\n라운드 비교가 필요한 상황을 확인하세요.</string>
+    <string name="predict_win">%1$d가지 상황에서 %2$s팀이 %3$d위 안에 들 수 있습니다.</string>
+    <string name="predict_reverse_win">아래 %1$d가지 상황이 아니라면 %2$s팀이 %3$d위 안에 들 수 있습니다.</string>
+    <string name="predict_rnd">%1$d가지 상황에서 라운드 승점에 따라 %2$s팀이 %3$d위 안에 들 수 있습니다.\n나머지 상황에서는 불가능합니다.</string>
+    <string name="predict_reverse_rnd">%1$d가지 상황에서 라운드 승점에 따라 %2$s팀이 %3$d위 안에 들 수 있습니다.\n나머지 상황에서 항상 가능합니다.</string>
+    <string name="predict_null">모든 상황에서 %1$s팀은 %2$d위 안에 들 수 없습니다.</string>
+    <string name="predict_perfect_win">모든 상황에서 %1$s팀은 %2$d위 안에 들 수 있습니다.</string>
+    <string name="predict_perfect_rnd">모든 상황에서 라운드 승점에 따라 %1$s팀이 %2$d위 안에 들 수 있습니다.</string>
 </resources>

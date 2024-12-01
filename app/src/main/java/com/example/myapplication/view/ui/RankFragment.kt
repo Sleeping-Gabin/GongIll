@@ -10,10 +10,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
@@ -23,7 +19,6 @@ import com.example.myapplication.databinding.RankFragmentBinding
 import com.example.myapplication.view.adapter.RankAdapter
 import com.example.myapplication.view.listener.OnTeamTouchListener
 import com.example.myapplication.view.model.MyViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class RankFragment: Fragment(), OnTeamTouchListener{
@@ -47,9 +42,9 @@ class RankFragment: Fragment(), OnTeamTouchListener{
         }
 
         binding.rankItemHPredictBtn.setOnClickListener {
-            val remain = model.currentPlayList.value!!.filter { it.winIdx == null }.count()
-            if (remain > 10)
-                model.toastObserver.value = "10개 이상의 경기가 남은 경우 가능성을 확인 할 수 없습니다."
+            val remain = model.currentPlayList.value!!.count { it.winIdx == null }
+            if (remain > 12)
+                model.toastObserver.value = "12개 이상의 경기가 남은 경우 가능성을 확인 할 수 없습니다."
             else
                 showPredictDialog()
         }
