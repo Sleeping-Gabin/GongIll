@@ -44,8 +44,6 @@ class PredictResultFragment: Fragment() {
         adapter = PredictResultAdapter(result)
         binding.predictResultView.adapter = adapter
 
-        setPredictText()
-
         binding.predictResultBtns.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (checkedId) {
                 R.id.predictResult_win -> {
@@ -66,6 +64,8 @@ class PredictResultFragment: Fragment() {
             }
 
         }
+
+        setPredictText()
 
         return binding.root
     }
@@ -109,7 +109,8 @@ class PredictResultFragment: Fragment() {
             val color =
                 MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorError)
             val spannable = SpannableString(text)
-            spannable.setSpan(ForegroundColorSpan(color), 7, 12, 0)
+            val length = result.winScenario.size.toString().length
+            spannable.setSpan(ForegroundColorSpan(color), 10+length, 15+length, 0)
             binding.predictResultTxt.text = spannable
 
             binding.predictResultRound.visibility = View.GONE
@@ -131,7 +132,7 @@ class PredictResultFragment: Fragment() {
                     spannable.setSpan(
                         ForegroundColorSpan(color),
                         text.length - 29,
-                        text.length - 24,
+                        text.length - 23,
                         0
                     )
                     binding.predictResultTxt.text = spannable
@@ -159,6 +160,7 @@ class PredictResultFragment: Fragment() {
                 MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorError)
             val spannable = SpannableString(text)
             spannable.setSpan(ForegroundColorSpan(color), text.length - 5, text.length, 0)
+            binding.predictResultTxt.text = spannable
 
             binding.predictResultWin.visibility = View.GONE
             binding.predictResultRound.visibility = View.GONE

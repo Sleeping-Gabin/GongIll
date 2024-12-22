@@ -27,6 +27,10 @@ data class Scenario(
         return winNum(idx) - finishedWins.getOrDefault(idx,0)
     }
 
+    fun newLoseNum(idx: Int): Int {
+        return teamResults.count { it.team1Idx == idx || it.team2Idx == idx } - newWinNum(idx)
+    }
+
     private fun isSameGames(other: Scenario): Boolean {
         if (other.teamResults.size != teamResults.size) return false
         for (i in 0 until teamResults.size) {

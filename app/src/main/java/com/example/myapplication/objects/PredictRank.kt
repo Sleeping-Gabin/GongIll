@@ -14,12 +14,16 @@ class PredictRank(
     private val teams = teamList.map { it.alias }
     private val targetIdx = teams.indexOf(targetTeam)
     private val finishedRnd = teamList.map { it.roundWin }
-    private val finishedResult = playList.filter { it.winIdx != null }
-        .map { GameResult(teams.indexOf(it.team1), teams.indexOf(it.team2), it.playNum, it.winIdx) } //진행한 경기
+    private val finishedResult = playList.filter { it.winIdx != null } //진행한 경기
+        .map {
+            val winIdx = if (it.winIdx==0) teams.indexOf(it.team1) else teams.indexOf(it.team2)
+            GameResult(teams.indexOf(it.team1), teams.indexOf(it.team2), it.playNum,  winIdx)
+        }
     private val remainPlay = playList.filter { it.winIdx == null }
         .map { GameResult(teams.indexOf(it.team1), teams.indexOf(it.team2), it.playNum, null) } //남은 경기
 
     private var winScenarios = hashSetOf<Scenario>()
+    private var failScenario = hashSetOf<Scenario>()
     private var roundScenarios = hashSetOf<Scenario>()
 
     private var progress = 0
@@ -51,33 +55,59 @@ class PredictRank(
 
     private fun evaluateScenario(scenario: Scenario) {
         scenario.update()
-        val targetWin = scenario.winNum(targetIdx)
+        val targetWin = scenario.winNum(targetIdx) //타겟 팀 승리 수
         val highTeamCount = scenario.wins.count { it.value > targetWin } //타겟 팀보다 승리 수가 많은 팀 수
+        
+        val targetRnd = finishedRnd[targetIdx] //타겟 팀 라운드 승점
+        val targetNewWin = scenario.newWinNum(targetIdx)
+        val targetNewLose = scenario.newLoseNum(targetIdx)
 
-        if (highTeamCount >= targetRank) { //타겟 팀보다 승리 수가 많은 팀이 목표 순위보다 더 많으면 실패
-            addScenario(scenario, "lose")
+        // 타겟 팀의 최대/최소 라운드 승점
+        val targetMaxRnd = targetRnd + 2*targetNewWin
+        val targetMinRnd = targetRnd - 2*targetNewLose
+
+        val sameWinTeamIdxs = scenario.wins.entries //타겟 팀과 승리 횟수가 같은 팀들
+                .filter { it.value==targetWin && it.key!=targetIdx }
+                .map { it.key!! }
+        val sameWinCount = sameWinTeamIdxs.size
+        
+        // 승리 횟수가 같은 팀의 최대/최소 라운드 승점
+        val sameWinMaxRnds = sameWinTeamIdxs.map { finishedRnd[it] + 2*scenario.newWinNum(it) }
+        val sameWinMinRnds = sameWinTeamIdxs.map { finishedRnd[it] - 2*scenario.newLoseNum(it) }
+        
+        // 최소 승점이 타겟 팀의 최대 승점보다 높다 -> 무조건 높은 순위
+        // 최대 승점이 타겟 팀의 최소 승점보다 낮다 -> 무조건 낮은 순위
+        val highRndTeamCount = sameWinMinRnds.count { it > targetMaxRnd }
+        val lowRndTeamCount = sameWinMaxRnds.count { it < targetMinRnd }
+
+
+        // 타겟 팀보다 높은 순위의 팀이 목표 순위보다 더 많으면 실패
+        if (highTeamCount + highRndTeamCount >= targetRank) {
+            addScenario(scenario, "fail")
             return
         }
 
-        val sameWinsCount = scenario.wins.count { it.value == targetWin } //타겟 팀과 승리 수가 같은 팀
-        if (highTeamCount + sameWinsCount <= targetRank) {
+        // 승리 수가 같거나 많은 팀이 목표 순위보다 더 적으면 성공
+        if (highTeamCount + sameWinCount - lowRndTeamCount < targetRank) {
             addScenario(scenario, "win")
             return
         }
 
-        when (sameWinsCount) {
-            2 -> {
+        when (sameWinCount) {
+            1 -> { //승리 수가 같은 팀이 하나일 때 두 팀간의 승패로 순위 결정
                 val sameWinTeamIdx = scenario.wins.entries.firstOrNull { it.value==targetWin && it.key!=targetIdx }?.key!!
-                evaluateSingleSameWin(scenario, sameWinTeamIdx)
+                match1on1(scenario, sameWinTeamIdx)
             }
-            else -> addScenario(scenario, "round")
+            else -> {
+                addScenario(scenario, "round")
+            }
         }
 
         progress += (50f / (1 shl remainPlay.size)).toInt()
         update(progress)
     }
 
-    private fun evaluateSingleSameWin(scenario: Scenario, opponentIdx: Int) {
+    private fun match1on1(scenario: Scenario, opponentIdx: Int) {
         val targetTeamWins = (scenario.finishedResult + scenario.teamResults)
             .filter { (it.team1Idx == targetIdx && it.team2Idx == opponentIdx) || (it.team2Idx == targetIdx && it.team1Idx == opponentIdx) }
             .map { it.winner == targetIdx }
@@ -87,43 +117,50 @@ class PredictRank(
 
         when {
             winCount > loseCount -> addScenario(scenario, "win")
-            winCount < loseCount -> addScenario(scenario, "lose")
+            winCount < loseCount -> addScenario(scenario, "fail")
             else -> {
-                val targetRnd = finishedRnd[targetIdx]
-                val sameWinTeamRnd = finishedRnd[opponentIdx]
-                val targetNewWin = scenario.newWinNum(targetIdx)
-                val opponentNewWin = scenario.newWinNum(opponentIdx)
-
-                if (targetRnd > sameWinTeamRnd + 4*opponentNewWin)
-                    addScenario(scenario, "win")
-                else if (sameWinTeamRnd > targetRnd + 4*targetNewWin)
-                    addScenario(scenario, "lose")
-                else
-                    addScenario(scenario, "round")
+                addScenario(scenario, compareRound(scenario, opponentIdx))
             }
         }
     }
 
+    private fun compareRound(scenario: Scenario, opponentIdx: Int): String {
+        val targetRnd = finishedRnd[targetIdx]
+        val targetNewWin = scenario.newWinNum(targetIdx)
+        val targetNewLose = scenario.newLoseNum(targetIdx)
+
+        val opponentRnd = finishedRnd[opponentIdx]
+        val opponentNewWin = scenario.newWinNum(opponentIdx)
+        val opponentNewLose = scenario.newLoseNum(opponentIdx)
+
+        if (targetRnd - 2*targetNewLose > opponentRnd + 2*opponentNewWin)
+            return "win"
+        else if (opponentRnd - 2*opponentNewLose > targetRnd + 2*targetNewWin)
+            return "fail"
+        else
+            return "round"
+    }
+
     private  fun addScenario(scenario: Scenario, type: String) {
-        if (type == "win") {
-            if (!reverse) winScenarios.add(scenario.copy())
-        }
-        else if (type == "lose") {
-            if (reverse) winScenarios.add(scenario.copy())
-        }
-        else {
-            roundScenarios.add(scenario.copy())
+        when (type) {
+            "win" -> {
+                winScenarios.add(scenario.copy())
+            }
+            "fail" -> {
+                failScenario.add(scenario.copy())
+            }
+            else -> {
+                roundScenarios.add(scenario.copy())
+            }
         }
     }
 
     fun predict(): PredictResult {
         exploreScenarios(Scenario(finishedResult, mutableListOf()), 0)
 
-        if (winScenarios.size+roundScenarios.size > 1 shl remainPlay.size-1) {
+        if ((1 shl remainPlay.size)-winScenarios.size-roundScenarios.size < winScenarios.size ) { //성공 상황이 실패 상황보다 많을 때
             reverse = true
-            winScenarios.clear()
-            roundScenarios.clear()
-            exploreScenarios(Scenario(finishedResult, mutableListOf()), 0)
+            winScenarios = failScenario.toHashSet()
         }
 
         progress = 50
