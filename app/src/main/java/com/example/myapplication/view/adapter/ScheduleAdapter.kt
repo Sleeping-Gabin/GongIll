@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
  * @property[filter] 경기 일정을 필터링할 [Filter] 객체
  */
 class ScheduleAdapter(list: List<Play>?, val listener: OnPlayDragListener): RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
-    var playList: ArrayList<Play> = list?.toCollection(ArrayList()) ?: arrayListOf()
+    private var playList: ArrayList<Play> = list?.toCollection(ArrayList()) ?: arrayListOf()
     private var filterList = ArrayList(playList)
     var filter = Filter.ALL
 

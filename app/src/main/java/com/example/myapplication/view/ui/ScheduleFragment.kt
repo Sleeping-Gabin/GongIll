@@ -10,19 +10,16 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.view.listener.OnPlayDragListener
 import com.example.myapplication.R
-import com.example.myapplication.view.model.MyViewModel
-import com.example.myapplication.view.adapter.ScheduleAdapter
-import com.example.myapplication.view.callback.SimpleScheduleCallback
 import com.example.myapplication.database.entity.Play
 import com.example.myapplication.databinding.ScheduleFragmentBinding
+import com.example.myapplication.view.adapter.ScheduleAdapter
+import com.example.myapplication.view.callback.SimpleScheduleCallback
+import com.example.myapplication.view.listener.OnPlayDragListener
+import com.example.myapplication.view.model.MyViewModel
 import com.google.android.material.chip.ChipGroup
 
 /**
@@ -37,7 +34,6 @@ class ScheduleFragment: Fragment(), OnPlayDragListener {
     private val model: MyViewModel by activityViewModels()
     private lateinit var binding: ScheduleFragmentBinding
     private lateinit var pref: SharedPreferences
-    private val changedPlays: ArrayList<Play> = arrayListOf()
 
     /**
      * GroupDetailFragment의 View를 생성
@@ -104,8 +100,8 @@ class ScheduleFragment: Fragment(), OnPlayDragListener {
             }
         }
 
-        binding.chipFinish.setOnCheckedChangeListener { chip, isChecked ->
         //'진행한 경기' 선택
+        binding.chipFinish.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.chipYet.isChecked = false
                 binding.chipAll.isChecked = false
@@ -114,8 +110,8 @@ class ScheduleFragment: Fragment(), OnPlayDragListener {
             }
         }
 
-        binding.chipYet.setOnCheckedChangeListener { chip, isChecked ->
         //'남은 경기' 선택
+        binding.chipYet.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.chipFinish.isChecked = false
                 binding.chipAll.isChecked = false

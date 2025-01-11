@@ -2,13 +2,11 @@ package com.example.myapplication.view.callback
 
 import android.content.Context
 import android.graphics.Canvas
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.view.adapter.ScheduleAdapter
-import java.lang.Float.max
 import java.lang.Float.min
 
 /**
@@ -26,10 +24,9 @@ import java.lang.Float.min
 class SimpleScheduleCallback(private val adapter: ScheduleAdapter, context: Context):
     ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
     private val maxSwipe = with(Density(context)) {55.dp.toPx()}
-    var swipeLength = 0f
-    var currentX = 0f
-    var currentY = 0f
-    var currentSwipeHolder: ScheduleAdapter.ViewHolder? = null
+    private var currentX = 0f
+    private var currentY = 0f
+    private var currentSwipeHolder: ScheduleAdapter.ViewHolder? = null
 
     /**
      * 아이템을 드래그할 때 호출
@@ -94,11 +91,6 @@ class SimpleScheduleCallback(private val adapter: ScheduleAdapter, context: Cont
         //이 이상 swipe하면 무조건 swipe out
         //swipe하고 손을 뗄때 호출됨
         val holder = viewHolder as ScheduleAdapter.ViewHolder
-
-        swipeLength = if (holder.isSwiped)
-            currentX + maxSwipe
-        else
-            currentX
 
         //스와이프 제한 범위 이상으로 스와이프하면 스와이프 상태를 변경
         //스와이프 제한 범위 이하로 스와이프하면 스와이프 취소

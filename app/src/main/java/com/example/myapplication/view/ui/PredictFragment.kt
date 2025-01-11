@@ -4,20 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.myapplication.objects.PredictRank
 import com.example.myapplication.R
 import com.example.myapplication.databinding.PredictFragmentBinding
-import com.example.myapplication.objects.PredictResult
+import com.example.myapplication.objects.PredictRank
 import com.example.myapplication.view.model.MyViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 응원하는 팀이 특정 순위 내에 진입할 시나리오를 계산하는 Fragment

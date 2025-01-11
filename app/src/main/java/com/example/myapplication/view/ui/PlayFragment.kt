@@ -50,7 +50,7 @@ class PlayFragment: Fragment(), OnPointTouchListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = PlayFragmentBinding.inflate(inflater)
 
         return binding.root
@@ -81,7 +81,6 @@ class PlayFragment: Fragment(), OnPointTouchListener {
 
         //경기 정보 표시
         play = model.selectedPlay!!
-        //binding.playTitleEdit.text = "${play.team1}  vs  ${play.team2}"
         binding.playToolBar.title = "${play.team1}  vs  ${play.team2}"
         binding.playSets.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.playSets.adapter = PlayAdapter(play, this)
@@ -93,10 +92,9 @@ class PlayFragment: Fragment(), OnPointTouchListener {
      * Dialog를 이용해 터치한 세트 데이터의 점수를 수정한다.
      * 가능한 점수일 경우만 데이터를 수정한다.
      *
-     * @param[play] 현재 경기의 [Play] 객체
-     * @param[round] 터치한 세트 데이터의 인덱스
+     * @param[set] 터치한 세트 데이터의 인덱스
      */
-    override fun onTouchItem(play: Play, round: Int) {
+    override fun onTouchItem(set: Int) {
         val dialogBinding = EditDialogBinding.inflate(layoutInflater)
         dialogBinding.team1Dialog.text = play.team1
         dialogBinding.team2Dialog.text = play.team2
@@ -130,9 +128,9 @@ class PlayFragment: Fragment(), OnPointTouchListener {
         //연장전에서 동점일 경우 기존 승리 팀 초기 선택
         if (picker1.value == picker2.value && set == 3) {
             dialogBinding.timeWin.visibility = View.VISIBLE
-            if (play.roundResult[round] == 0)
+            if (play.roundResult[set] == 0)
                 dialogBinding.team1TimeWin.isChecked = true
-            else if (play.roundResult[round] == 1)
+            else if (play.roundResult[set] == 1)
                 dialogBinding.team2TimeWin.isChecked = true
         }
 
@@ -173,7 +171,7 @@ class PlayFragment: Fragment(), OnPointTouchListener {
             if (new == 5 && picker1.value !in 3..5)
                 picker1.value = 3
 
-            if (round == 3 && picker1.value == picker2.value)
+            if (set == 3 && picker1.value == picker2.value)
                 dialogBinding.timeWin.visibility = View.VISIBLE
             else
                 dialogBinding.timeWin.visibility = View.GONE
@@ -214,7 +212,7 @@ class PlayFragment: Fragment(), OnPointTouchListener {
                 model.changeTeamList.add(team2)
 
                 binding.playSets.adapter?.notifyItemRangeRemoved(play.roundCount, 4-play.roundCount)
-                binding.playSets.adapter?.notifyItemChanged(round)
+                binding.playSets.adapter?.notifyItemChanged(set)
                 builder.dismiss()
             }
         }

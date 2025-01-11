@@ -18,7 +18,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
@@ -94,7 +93,8 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
 
         //그룹의 팀 목록을 표시
         var teamList = model.groupTeamList.value?.get(group)
-        binding.groupDetailTeamsView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.groupDetailTeamsView.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val adapter = GroupTeamAdapter(teamList, this, model)
         binding.groupDetailTeamsView.adapter = adapter
 
@@ -111,7 +111,7 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
 
         //그룹의 팀 목록이 변경될 때 반영
         model.groupTeamList.observe(viewLifecycleOwner) {
-            teamList = it.get(group)
+            teamList = it[group]
             adapter.changeData(teamList)
         }
     }
@@ -127,7 +127,8 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolBar.setupWithNavController(navController, appBarConfiguration)
-        binding.toolBar.navigationIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.arrow_back_white)
+        binding.toolBar.navigationIcon = AppCompatResources.getDrawable(
+            requireContext(), R.drawable.arrow_back_white)
         binding.toolBar.title = model.selectedGroup?.name
 
         //버튼을 눌러 그룹의 정보를 변경하거나 삭제할 수 있음
@@ -173,15 +174,18 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
 
             //팀의 이름과 별칭이 동일했다면 새로 입력한 팀 이름에 따라 별칭을 동일하게 변경
             override fun afterTextChanged(s: Editable?) {
-                if (isSame && s != null && s.filterNot { it.isWhitespace() }.length <= dialogBinding.addTeamDialogAlias.counterMaxLength)
+                if (isSame && s != null && s.filterNot { it.isWhitespace() }.length
+                    <= dialogBinding.addTeamDialogAlias.counterMaxLength)
                     dialogBinding.addTeamDialogAliasText.setText(s.filterNot { it.isWhitespace() })
             }
         })
 
-        dialogBinding.addTeamDialogAliasText.doOnTextChanged { text, start, before, count ->
         //별칭이 너무 길 경우 에러 메시지
+        dialogBinding.addTeamDialogAliasText.doOnTextChanged { text, _, _, _ ->
             if (text != null && text.length > dialogBinding.addTeamDialogAlias.counterMaxLength)
-                dialogBinding.addTeamDialogAlias.error = getString(R.string.error_alias_maxCount)
+                dialogBinding.addTeamDialogAlias.error = getString(
+                    R.string.error_alias_maxCount
+                    , dialogBinding.addTeamDialogAlias.counterMaxLength)
             else
                 dialogBinding.addTeamDialogAlias.error = null
         }
@@ -220,7 +224,7 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("그룹 '${group?.name}'을(를) 삭제합니다.")
             .setMessage("삭제 하면 되돌릴 수 없습니다. 해당 그룹에 포함된 팀과 경기 데이터도 함께 삭제됩니다.")
-            .setPositiveButton("삭제") { dialog, id ->
+            .setPositiveButton("삭제") { _, _ ->
                 model.deleteGroup(group!!)
                 Navigation.findNavController(requireActivity(), R.id.hostFragment).navigateUp()
             }
@@ -237,8 +241,9 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
         dialogBinding.addGroupDialogPlayNum.visibility = View.GONE
         dialogBinding.addGroupDialogGroupNameText.setText(group?.name)
 
-        val categoryList = model.categoryList.value?.filterNot { it == "others" }?.toCollection(arrayListOf()) ?: arrayListOf()
         //카테고리 선택 창에 카테고리 목록 등록
+        val categoryList = model.categoryList.value?.filterNot { it == "others" }
+            ?.toCollection(arrayListOf()) ?: arrayListOf()
         val arrayAdapter = ArrayAdapter(requireContext(),
             R.layout.group_array_item, categoryList)
 
@@ -250,10 +255,10 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
         //카테고리 목록이 변경될 때 반영
         model.categoryList.observe(viewLifecycleOwner) {
             arrayAdapter.clear()
-            arrayAdapter.addAll(it.filterNot { it == "others" })
+            arrayAdapter.addAll(it.filterNot { s -> s == "others" })
         }
 
-        dialogBinding.addGroupDialogGroupNameText.doBeforeTextChanged { text, start, count, after ->
+        dialogBinding.addGroupDialogGroupNameText.doBeforeTextChanged { _, _, _, _ ->
             dialogBinding.addGroupDialogGroupName.error = null
         }
 
@@ -261,7 +266,7 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(" ")
             .setNegativeButton("취소", null)
-            .setPositiveButton("확인") { dialog, id ->
+            .setPositiveButton("확인") { dialog, _ ->
                 if (dialogBinding.addGroupDialogGroupNameText.text.isNullOrBlank()) {
                     dialogBinding.addGroupDialogGroupName.error = getString(R.string.error_groupName_required)
                 }

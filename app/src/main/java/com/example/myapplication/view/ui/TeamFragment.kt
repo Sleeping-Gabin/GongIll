@@ -146,15 +146,19 @@ class TeamFragment: Fragment() {
 
             //별칭이 팀 이름과 같을 시 변경한 후에도 같게 적용
             override fun afterTextChanged(s: Editable?) {
-                if (isSame && s != null && s.filterNot { it.isWhitespace() }.length <= dialogBinding.addTeamDialogAlias.counterMaxLength)
+                if (isSame && s != null && s.filterNot { it.isWhitespace() }.length
+                    <= dialogBinding.addTeamDialogAlias.counterMaxLength) {
                     dialogBinding.addTeamDialogAliasText.setText(s.filterNot { it.isWhitespace() })
+                }
             }
         })
 
-        dialogBinding.addTeamDialogAliasText.doOnTextChanged { text, start, before, count ->
         //별칭이 너무 길 경우 에러 메시지
+        dialogBinding.addTeamDialogAliasText.doOnTextChanged { text, _, _, _ ->
             if (text != null && text.length > dialogBinding.addTeamDialogAlias.counterMaxLength)
-                dialogBinding.addTeamDialogAlias.error = getString(R.string.error_alias_maxCount)
+                dialogBinding.addTeamDialogAlias.error = getString(
+                    R.string.error_alias_maxCount,
+                    dialogBinding.addTeamDialogAlias.counterMaxLength)
             else
                 dialogBinding.addTeamDialogAlias.error = null
         }
@@ -193,7 +197,7 @@ class TeamFragment: Fragment() {
         MaterialAlertDialogBuilder(requireContext())
         .setTitle("${team.groupName}의 팀 '${team.name}'을(를) 삭제합니다.")
         .setMessage("삭제 하면 되돌릴 수 없습니다. 해당 팀에 포함된 경기 데이터도 함께 삭제됩니다.")
-        .setPositiveButton("삭제") { dialog, id ->
+        .setPositiveButton("삭제") { _, _ ->
             model.deleteTeam(team)
             Navigation.findNavController(requireActivity(), R.id.hostFragment).navigateUp()
         }

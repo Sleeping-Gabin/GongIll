@@ -96,8 +96,8 @@ class RankFragment: Fragment(), OnTeamTouchListener{
             R.layout.group_array_item, model.currentTeamList.value!!.map { it.alias })
         dialogBinding.predictDialogTeamText.setAdapter(arrayAdapter)
 
-        dialogBinding.predictDialogRankText.doOnTextChanged { text, start, before, count ->
         //목표 순위 입력 시 범위 밖의 순위일 경우 에러 메시지
+        dialogBinding.predictDialogRankText.doOnTextChanged { text, _, _, _ ->
             dialogBinding.predictDialogRank.error = null
             if ((text.toString().toIntOrNull() ?: Int.MAX_VALUE) > model.currentTeamList.value!!.size)
                 dialogBinding.predictDialogRank.error = getString(R.string.error_rank_max)

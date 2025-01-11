@@ -1,26 +1,20 @@
 package com.example.myapplication.view.ui
 
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.ui.node.getOrAddAdapter
 import androidx.core.content.edit
-import androidx.lifecycle.distinctUntilChanged
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.example.myapplication.view.model.MyViewModel
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.view.model.MyViewModel
 
 /**
  * 앱의 전체 화면을 구성하는 Activity 클래스
@@ -32,7 +26,7 @@ import com.example.myapplication.databinding.ActivityMainBinding
  */
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    lateinit var pref: SharedPreferences
+    private lateinit var pref: SharedPreferences
     private val model: MyViewModel by viewModels()
 
     /**
@@ -57,7 +51,6 @@ class MainActivity : AppCompatActivity() {
 
         //Navigation Controller 초기화
         initNavController()
-        //initSelectGroupText()
 
         //토스트 메시지를 띄움
         model.toastObserver.observe(this) {
@@ -103,8 +96,8 @@ class MainActivity : AppCompatActivity() {
         val arrayAdapter = ArrayAdapter(this, R.layout.group_array_item, arrayListOf(""))
         binding.selectGroupText.setAdapter(arrayAdapter)
         binding.selectGroupText.setText("", false)
-        binding.selectGroupText.setOnItemClickListener { adapterView, view, position, id ->
         //목록의 아이템 선택 시, 선택한 그룹으로 텍스트 변경
+        binding.selectGroupText.setOnItemClickListener { adapterView, _, position, _ ->
             val groupName = adapterView.getItemAtPosition(position).toString()
             changeSelectGroupText(groupName)
         }
@@ -172,8 +165,8 @@ class MainActivity : AppCompatActivity() {
         binding.toolBar.setupWithNavController(navController, appBarConfiguration)
         //binding.navBar.setupWithNavController(navController)
         NavigationUI.setupWithNavController(binding.navBar, navController, false)
-        navController.addOnDestinationChangedListener { controller, destination, argument ->
         //탭을 이동할 때, 해당 탭에 따른 UI 변경
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
                 R.id.scheduleFragment -> {
                     //그룹 선택창, 상단 앱 바, 하단 탭 바 모두 표시

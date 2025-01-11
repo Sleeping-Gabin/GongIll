@@ -3,19 +3,6 @@ package com.example.myapplication.database
 import org.json.JSONArray
 
 class TypeConverter {
-    @androidx.room.TypeConverter
-    fun ListToString(list: List<Int>): String {
-        return JSONArray(list).toString()
-    }
-
-    @androidx.room.TypeConverter
-    fun StringToList(string: String): List<Int> {
-        val jsonArray = JSONArray(string)
-        val list: List<Int> = Array(jsonArray.length()) {
-            jsonArray.getInt(it)
-        }.toList()
-        return list
-    }
 
     @androidx.room.TypeConverter
     fun ListNullToString(list: List<Int?>): String {

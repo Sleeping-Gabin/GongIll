@@ -3,7 +3,6 @@ package com.example.myapplication.view.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -25,8 +24,8 @@ import com.example.myapplication.view.model.MyViewModel
  * 카테고리 미지정 시의 "others"가 첫번째 요소
  */
 class CategoryAdapter(map: Map<String, List<Group>>?, val listener: OnGroupTouchListener, val model: MyViewModel): RecyclerView.Adapter<ViewHolder>() {
-    var categoryGroups = map?.toMap() ?: mapOf()
-    var categoryList = listOf("others") + categoryGroups.keys.filterNot { it == "others" }
+    private var categoryGroups = map?.toMap() ?: mapOf()
+    private var categoryList = listOf("others") + categoryGroups.keys.filterNot { it == "others" }
 
     /**
      * 카테고리 아이템의 ViewHolder

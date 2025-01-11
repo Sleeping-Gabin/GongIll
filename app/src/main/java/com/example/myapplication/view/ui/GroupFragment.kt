@@ -113,10 +113,12 @@ class GroupFragment : Fragment(), OnGroupTouchListener {
             }
         })
 
-        dialogBinding.addTeamDialogAliasText.doOnTextChanged { text, start, before, count ->
         //별칭이 너무 길 경우 경우 에러 메시지
+        dialogBinding.addTeamDialogAliasText.doOnTextChanged { text, _, _, _ ->
             if (text != null && text.length > dialogBinding.addTeamDialogAlias.counterMaxLength)
-                dialogBinding.addTeamDialogAlias.error = getString(R.string.error_alias_maxCount)
+                dialogBinding.addTeamDialogAlias.error = getString(
+                    R.string.error_alias_maxCount
+                    , dialogBinding.addTeamDialogAlias.counterMaxLength)
             else
                 dialogBinding.addTeamDialogAlias.error = null
         }
@@ -170,8 +172,9 @@ class GroupFragment : Fragment(), OnGroupTouchListener {
     override fun onTouchHeader(category: String) {
         val dialogBinding = AddGroupDialogBinding.inflate(layoutInflater)
 
-        val categoryList = model.categoryList.value?.filterNot { it == "others" }?.toCollection(arrayListOf()) ?: arrayListOf()
         //카테고리 입력 창에 카테고리 목록 연결
+        val categoryList = model.categoryList.value?.filterNot { it == "others" }
+            ?.toCollection(arrayListOf()) ?: arrayListOf()
         val arrayAdapter = ArrayAdapter(requireContext(),
             R.layout.group_array_item, categoryList)
         dialogBinding.addGroupDialogCategoryText.setAdapter(arrayAdapter)
@@ -181,7 +184,7 @@ class GroupFragment : Fragment(), OnGroupTouchListener {
         //카테고리 목록 변경 시 반영
         model.categoryList.observe(this) {
             arrayAdapter.clear()
-            arrayAdapter.addAll(it.filterNot { it == "others" })
+            arrayAdapter.addAll(it.filterNot { s -> s == "others" })
         }
 
         //Dialog 생성
@@ -192,11 +195,11 @@ class GroupFragment : Fragment(), OnGroupTouchListener {
             .setView(dialogBinding.root)
             .show()
 
-        dialogBinding.addGroupDialogGroupNameText.doBeforeTextChanged { text, start, count, after ->
+        dialogBinding.addGroupDialogGroupNameText.doBeforeTextChanged { _, _, _, _ ->
             dialogBinding.addGroupDialogGroupName.error = null
         }
 
-        dialogBinding.addGroupDialogPlayNumText.doBeforeTextChanged { text, start, count, after ->
+        dialogBinding.addGroupDialogPlayNumText.doBeforeTextChanged { _, _, _, _ ->
             dialogBinding.addGroupDialogPlayNum.error = null
         }
 

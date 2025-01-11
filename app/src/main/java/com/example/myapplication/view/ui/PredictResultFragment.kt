@@ -78,10 +78,6 @@ class PredictResultFragment: Fragment() {
             Navigation.findNavController(requireActivity(), R.id.hostFragment).navigateUp()
         }
 
-        binding = PredictResultFragmentBinding.inflate(inflater)
-
-        result = args.predictResult
-
         //시나리오 목록 표시
         binding.predictResultView.layoutManager =
             LinearLayoutManager(requireContext(), VERTICAL, false)

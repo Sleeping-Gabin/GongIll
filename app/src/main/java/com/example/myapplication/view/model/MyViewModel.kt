@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.CompetitionRepository
 import com.example.myapplication.database.entity.Group
@@ -14,7 +12,6 @@ import com.example.myapplication.database.entity.Team
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -58,11 +55,11 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
         get() = _groupTeamList
 
     private var _groupPlayList: MutableLiveData<Map<Group, List<Play>>> = MutableLiveData()
-    val groupPlayList: LiveData<Map<Group, List<Play>>>
+    private val groupPlayList: LiveData<Map<Group, List<Play>>>
         get() = _groupPlayList
 
     private var _teamPlayList: MutableLiveData<Map<Team, List<Play>>> = MutableLiveData()
-    val teamPlayList: LiveData<Map<Team, List<Play>>>
+    private val teamPlayList: LiveData<Map<Team, List<Play>>>
         get() = _teamPlayList
 
     private var _categoryGroupList: MutableLiveData<Map<String, List<Group>>> = MutableLiveData()
@@ -85,7 +82,7 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    var selectedCurrentGroup: Group? = null
+    private var selectedCurrentGroup: Group? = null
     var selectedGroup: Group? = null
     var selectedPlay: Play? = null
     var selectedTeam: Team? = null

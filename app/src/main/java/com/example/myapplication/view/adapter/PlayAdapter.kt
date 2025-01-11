@@ -1,11 +1,9 @@
 package com.example.myapplication.view.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.R
 import com.example.myapplication.database.entity.Play
 import com.example.myapplication.databinding.PlayItemBinding
 import com.example.myapplication.view.listener.OnPointTouchListener
@@ -90,7 +88,7 @@ class PlayAdapter(val play: Play, val listener: OnPointTouchListener): RecyclerV
         }
 
         binding.setPoint.setOnClickListener {
-            listener.onTouchItem(play, position)
+            listener.onTouchItem(position)
         }
     }
 

@@ -13,7 +13,7 @@
     <string name="textField_playNum">사이클 수</string>
     <string name="description_playNum">동일한 팀 간의 경기 횟수</string>
     <string name="error_teamName_required">팀명은 반드시 입력해야 합니다.</string>
-    <string name="error_alias_maxCount">별칭은 6글자 이하여야 합니다.</string>
+    <string name="error_alias_maxCount">별칭은 %1$d글자 이하여야 합니다.</string>
     <string name="error_playNum_min">1 이상의 숫자를 입력해야 합니다.</string>
     <string name="error_groupName_required">그룹명은 반드시 입력해야 합니다.</string>
     <string name="teamInfo">팀 정보</string>
