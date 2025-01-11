@@ -56,6 +56,20 @@ class ScheduleFragment: Fragment(), OnPlayDragListener {
         binding = ScheduleFragmentBinding.inflate(inflater)
         pref = requireActivity().getSharedPreferences("previous_state", Context.MODE_PRIVATE)
 
+        return binding.root
+    }
+
+    /**
+     * View가 생성된 후 호출
+     *
+     * adapter를 설정하고 Chip의 listener를 초기화한다.
+     * [MyViewModel.currentPlayList]의 데이터가 변경될 때마다 adapter의 데이터를 업데이트한다.
+     *
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //경기 목록 표시
         binding.scheduleView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val adapter = ScheduleAdapter(model.currentPlayList.value, this)
@@ -72,8 +86,6 @@ class ScheduleFragment: Fragment(), OnPlayDragListener {
         model.currentPlayList.observe(viewLifecycleOwner) {
             adapter.changeData(it)
         }
-
-        return binding.root
     }
 
     /**

@@ -63,6 +63,28 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
         binding = GroupDetailFragmentBinding.inflate(inflater)
         group = model.selectedGroup
 
+        return binding.root
+    }
+
+    /**
+     * View가 생성되었을 때 호출
+     *
+     * 툴바를 초기화하고 그룹 정보를 표시한다.
+     *
+     * - 뒤로 가기 버튼 동작 설정
+     * - 툴바 초기화
+     * - apdater를 연결하여 그룹의 팀 목록 표시
+     * - 그룹 정보 (팀 수, 경기 수, 진행한 경기 수) 표시
+     * - 팀 추가 버튼 클릭 listener 설정
+     * - [MyViewModel.groupTeamList]을 observe하여 UI에 반영
+     *
+     * @param[view] 생성된 View 객체
+     * @param[savedInstanceState] 이전 상태 정보를 저장한 Bundle 객체
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //뒤로 가기로 "그룹" 탭으로 이동
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             Navigation.findNavController(requireActivity(), R.id.hostFragment).navigateUp()
         }
@@ -92,8 +114,6 @@ class GroupDetailFragment: Fragment(), OnGroupTeamTouchListener {
             teamList = it.get(group)
             adapter.changeData(teamList)
         }
-
-        return binding.root
     }
 
     /**

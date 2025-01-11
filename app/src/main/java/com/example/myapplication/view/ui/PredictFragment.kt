@@ -47,19 +47,42 @@ class PredictFragment: Fragment() {
     ): View {
         binding = PredictFragmentBinding.inflate(inflater)
 
-        binding.predictDescription.text = getString(R.string.check_chance, args.team, args.rank)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val predictor = PredictRank(model.currentTeamList.value!!, model.currentPlayList.value!!,
-                args.team, args.rank) { CoroutineScope(Dispatchers.Main).launch { binding.progressBar.progress = it } }
-            val result = CoroutineScope(Dispatchers.Default).async { predictor.predict() }.await()
-
-            val action = PredictFragmentDirections.actionPredictFragmentToPredictResultFragment(result, args.team, args.rank)
-            Navigation.findNavController(requireActivity(), R.id.hostFragment).navigate(action)
-        }
-
-
         return binding.root
     }
 
+    /**
+     * View가 생성되었을 때 호출
+     *
+     * 비동기적으로 특정 팀이 특정 순위 내에 드는 시나리오를 계산하는 작업을 수행하고,
+     * 진행 바를 업데이트한다.
+     * 작업 완료 시 [PredictResultFragment]로 전환된다.
+     *
+     * @param[view] 생성된 View 객체
+     * @param[savedInstanceState] 이전 상태를 저장한 Bundle 객체
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.predictDescription.text = getString(R.string.check_chance, args.team, args.rank)
+
+        //시나리오 계산
+        viewLifecycleOwner.lifecycleScope.launch {
+            val predictor = PredictRank(
+                model.currentTeamList.value!!, model.currentPlayList.value!!,
+                args.team, args.rank
+            ) {
+                CoroutineScope(Dispatchers.Main).launch { //진행 바 업데이트
+                    binding.progressBar.progress = it
+                }
+            }
+            val result = withContext(Dispatchers.Default) { predictor.predict() }
+
+            val action = PredictFragmentDirections.actionPredictFragmentToPredictResultFragment(
+                result,
+                args.team,
+                args.rank
+            )
+            findNavController().navigate(action)
+        }
+    }
 }

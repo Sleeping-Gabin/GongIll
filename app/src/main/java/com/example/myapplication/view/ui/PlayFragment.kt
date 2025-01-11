@@ -53,6 +53,22 @@ class PlayFragment: Fragment(), OnPointTouchListener {
     ): View? {
         binding = PlayFragmentBinding.inflate(inflater)
 
+        return binding.root
+    }
+
+    /**
+     * Fragment의 View가 생성된 후 호출
+     *
+     * 뒤로가기 버튼의 동작을 설정하고 툴바를 초기화한다.
+     * adapter를 연결해 경기 정보를 표시한다.
+     *
+     * @param[view] 생성된 View 객체
+     * @param[savedInstanceState] 이전 상태를 저장한 Bundle 객체
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //뒤로 가기 시 이전 탭("경기")으로 이동
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             Navigation.findNavController(requireActivity(), R.id.hostFragment).navigateUp()
         }
@@ -69,8 +85,6 @@ class PlayFragment: Fragment(), OnPointTouchListener {
         binding.playToolBar.title = "${play.team1}  vs  ${play.team2}"
         binding.playSets.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.playSets.adapter = PlayAdapter(play, this)
-
-        return binding.root
     }
 
     /**

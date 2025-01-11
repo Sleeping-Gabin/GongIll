@@ -34,6 +34,7 @@ import kotlin.math.min
  */
 class GroupFragment : Fragment(), OnGroupTouchListener {
     private val model: MyViewModel by activityViewModels()
+    lateinit var binding: GroupFragmentBinding
 
     /**
      * GroupFragment의 View를 생성
@@ -49,7 +50,23 @@ class GroupFragment : Fragment(), OnGroupTouchListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = GroupFragmentBinding.inflate(inflater)
+        binding = GroupFragmentBinding.inflate(inflater)
+
+        return binding.root
+    }
+
+    /**
+     * View가 생성되었을 때 호출된다.
+     *
+     * dapter를 연결하여 카테고리별 그룹 목록을 표시하고,
+     * [MyViewModel.categoryGroupList]를 observe하여 데이터 변경 사항을 UI에 반영한다.
+     *
+     * @param[view] 생성된 View
+     * @param[savedInstanceState] 프래그먼트의 이전 상태 정보
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.groupView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val adapter = CategoryAdapter(model.categoryGroupList.value, this, model)
         binding.groupView.adapter = adapter
@@ -58,8 +75,6 @@ class GroupFragment : Fragment(), OnGroupTouchListener {
         model.categoryGroupList.observe(viewLifecycleOwner) {
             adapter.changeData(it)
         }
-
-        return binding.root
     }
 
     /**

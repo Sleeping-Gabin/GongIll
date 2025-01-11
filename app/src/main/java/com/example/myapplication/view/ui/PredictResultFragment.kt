@@ -50,6 +50,30 @@ class PredictResultFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = PredictResultFragmentBinding.inflate(inflater)
+
+        result = args.predictResult
+
+        return binding.root
+    }
+
+    /**
+     * View가 생성되었을 때 호출
+     *
+     * 모드에 따라 시나리오 목록을 표시한다.
+     *
+     * - 뒤로 가기 버튼 동작 설정
+     * - adapter를 연결하여 시나리오 목록을 표시
+     * - 모드 버튼 체크 이벤트의 listener를 설정
+     * - 모드에 따른 텍스트 표시
+     *
+     * @param[view] 생성된 View 객체
+     * @param[savedInstanceState] 이전 상태를 저장한 Bundle 객체
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //뒤로 가기로 "순위" 탭으로 이동
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             Navigation.findNavController(requireActivity(), R.id.hostFragment).navigateUp()
         }
@@ -86,8 +110,6 @@ class PredictResultFragment: Fragment() {
         }
 
         setPredictText()
-
-        return binding.root
     }
 
     /**

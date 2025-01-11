@@ -53,14 +53,35 @@ class TeamFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = TeamFragmentBinding.inflate(inflater)
+
+        team = model.selectedTeam!!
+
+        return binding.root
+    }
+
+    /**
+     * View가 생성되었을 떼 호출
+     *
+     * 앱바를 초기화하고 팀의 정보를 표시한다.
+     *
+     * - 뒤로 가기 동작 설정
+     * - adapter를 연결하여 팀의 경기 정보 표시
+     * - 팀 정보(순위, 승/패, 평균 포인트, 무승부) 표시
+     * - Navigation Controller와 앱바 설정
+     * - 앱바 메뉴 아이템 터치 이벤트 listener 추가
+     *
+     * @param[view] 생성된 View 객체
+     * @param[savedInstanceState] 이전 상태 정보를 저장한 Bundle 객체
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         //뒤로 가기 시 이전 탭으로 이동
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             Navigation.findNavController(requireActivity(), R.id.hostFragment).navigateUp()
         }
 
-        team = model.selectedTeam!!
-
-        binding = TeamFragmentBinding.inflate(inflater)
         //팀의 경기 정보 표시
         binding.teamPlayInfoView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -94,8 +115,6 @@ class TeamFragment: Fragment() {
                 else -> false
             }
         }
-
-        return binding.root
     }
 
     /**

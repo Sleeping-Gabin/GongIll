@@ -47,6 +47,23 @@ class RankFragment: Fragment(), OnTeamTouchListener{
     ): View {
         binding = RankFragmentBinding.inflate(inflater)
 
+        return binding.root
+    }
+
+    /**
+     * View가 생성되었을 때 호출
+     *
+     * adapter를 연결하여 순위대로 팀을 표시하고,
+     * [MyViewModel.currentTeamList]을 ovserve하여 UI에 반영한다.
+     * 플로팅 버튼 터치 이벤트의 listener를 설정한다.
+     *
+     * @param[view] Fragment의 View 객체
+     * @param[savedInstanceState] 이전 상태가 저장된 Bundle 객체
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //순위에 따라 팀 목록 표시
         binding.rankView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val adapter = RankAdapter(model.currentTeamList.value, this)
@@ -66,8 +83,6 @@ class RankFragment: Fragment(), OnTeamTouchListener{
             else
                 showPredictDialog()
         }
-
-        return binding.root
     }
 
     /**
