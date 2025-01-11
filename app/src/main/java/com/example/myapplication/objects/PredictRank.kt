@@ -103,7 +103,7 @@ class PredictRank(
             }
         }
 
-        progress += (50f / (1 shl remainPlay.size)).toInt()
+        progress += (20f / (1 shl remainPlay.size)).toInt()
         update(progress)
     }
 
@@ -133,12 +133,12 @@ class PredictRank(
         val opponentNewWin = scenario.newWinNum(opponentIdx)
         val opponentNewLose = scenario.newLoseNum(opponentIdx)
 
-        if (targetRnd - 2*targetNewLose > opponentRnd + 2*opponentNewWin)
-            return "win"
+        return if (targetRnd - 2*targetNewLose > opponentRnd + 2*opponentNewWin)
+            "win"
         else if (opponentRnd - 2*opponentNewLose > targetRnd + 2*targetNewWin)
-            return "fail"
+            "fail"
         else
-            return "round"
+            "round"
     }
 
     private  fun addScenario(scenario: Scenario, type: String) {
@@ -163,30 +163,30 @@ class PredictRank(
             winScenarios = failScenario.toHashSet()
         }
 
-        progress = 50
+        progress = 20
         update(progress)
 
         var scenarios = winScenarios
         while (scenarios.isNotEmpty()) {
             scenarios = mergeDiffOne(scenarios, "win")
 
-            progress += (25f / remainPlay.size).toInt()
+            progress += (40f / remainPlay.size).toInt()
             update(progress)
         }
 
-        progress = 75
-        update(75)
+        progress = 60
+        update(progress)
 
         scenarios = roundScenarios
         while (scenarios.isNotEmpty()) {
             scenarios = mergeDiffOne(scenarios, "round")
 
-            progress += (25f / remainPlay.size).toInt()
+            progress += (40f / remainPlay.size).toInt()
             update(progress)
         }
 
         progress = 100
-        update(100)
+        update(progress)
 
         return PredictResult(teams, winScenarios.toMutableList(), roundScenarios.toMutableList(), reverse)
     }
