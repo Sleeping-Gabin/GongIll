@@ -149,12 +149,10 @@ class SimpleScheduleCallback(private val adapter: ScheduleAdapter, context: Cont
                 var x =  dX
                 //스와이프 된 상태인 경우(maxSwipe 이상으로 스와이프 후 손을 놓은 상태 포함)
                 if (holder.isSwiped) {
-                    x = if (isCurrentlyActive) {
-                        if (dX < 0) dX - maxSwipe
-                        else -maxSwipe + dX
-                    }
                     //스와이프 중이면 x축의 위치는 움직인 거리(dx) + 스와이프 고정 길이(maxSwipe)
                     //스와이프 후 손을 놓은 상태이면 maxSwipe를 넘어서 되돌아가지 않음
+                    x = if (isCurrentlyActive)
+                        -maxSwipe + dX
                     else
                         min(dX, -maxSwipe)
                 }
