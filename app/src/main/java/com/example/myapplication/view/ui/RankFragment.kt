@@ -21,10 +21,25 @@ import com.example.myapplication.view.listener.OnTeamTouchListener
 import com.example.myapplication.view.model.MyViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+/**
+ * 팀 순위를 보여주는 Fragment
+ *
+ * @property[model] 앱의 데이터를 공유하는 ViewModel 객체
+ * @property[binding] RankFragment의 ViewBinding 객체
+ */
 class RankFragment: Fragment(), OnTeamTouchListener{
     private val model: MyViewModel by activityViewModels()
     private lateinit var binding: RankFragmentBinding
 
+    /**
+     * RankFragment의 View를 생성
+     *
+     * @param[inflater] View 생성을 위한 LayoutInflater 객체
+     * @param[container] 생성된 View의 부모 ViewGroup 객체
+     * @param[savedInstanceState] 이전 상태 정보를 저장한 Bundle 객체
+     *
+     * @return 생성된 View 객체
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,10 +52,13 @@ class RankFragment: Fragment(), OnTeamTouchListener{
         val adapter = RankAdapter(model.currentTeamList.value, this)
         binding.rankView.adapter = adapter
 
+        //현재 팀 리스트가 변경될 때마다 adapter의 데이터를 업데이트
         model.currentTeamList.observe(viewLifecycleOwner) {
             adapter.changeData(it.sortedBy { play -> play.rank })
         }
 
+        //남은 경기 수가 12경기 미만일 경우 Diolog 표시
+        val maxRemain = 12
         binding.rankItemHPredictBtn.setOnClickListener {
             val remain = model.currentPlayList.value!!.count { it.winIdx == null }
             if (remain > 12)
@@ -52,6 +70,10 @@ class RankFragment: Fragment(), OnTeamTouchListener{
         return binding.root
     }
 
+    /**
+     * 시나리오를 확인하기 위한 Dialog 표시한다.
+     * 응원 팀과 목표 순위를 지정해 [PredictFragment]로 전환한다.
+     */
     private fun showPredictDialog() {
         val dialogBinding = PredictDialogBinding.inflate(layoutInflater)
 
@@ -60,11 +82,13 @@ class RankFragment: Fragment(), OnTeamTouchListener{
         dialogBinding.predictDialogTeamText.setAdapter(arrayAdapter)
 
         dialogBinding.predictDialogRankText.doOnTextChanged { text, start, before, count ->
+        //목표 순위 입력 시 범위 밖의 순위일 경우 에러 메시지
             dialogBinding.predictDialogRank.error = null
             if ((text.toString().toIntOrNull() ?: Int.MAX_VALUE) > model.currentTeamList.value!!.size)
                 dialogBinding.predictDialogRank.error = getString(R.string.error_rank_max)
         }
 
+        //Dialog 생성
         val builder = MaterialAlertDialogBuilder(requireContext())
             .setTitle(" ")
             .setNegativeButton("취소", null)
@@ -72,18 +96,19 @@ class RankFragment: Fragment(), OnTeamTouchListener{
             .setView(dialogBinding.root)
             .show()
 
+        //확인 버튼을 누를 시
         builder.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             var isError = dialogBinding.predictDialogRank.error != null
-            if (dialogBinding.predictDialogTeamText.text.isNullOrBlank()) {
+            if (dialogBinding.predictDialogTeamText.text.isNullOrBlank()) { //팀 미선택 에러
                 dialogBinding.predictDialogTeam.error = getString(R.string.error_team_required)
                 isError = true
             }
-            if (dialogBinding.predictDialogRankText.text.isNullOrBlank()) {
+            if (dialogBinding.predictDialogRankText.text.isNullOrBlank()) { //순위 미입력 에러
                 dialogBinding.predictDialogRank.error = getString(R.string.error_rank_required)
                 isError = true
             }
 
-            if (!isError) {
+            if (!isError) { //문제가 없으면 PredictFragment로 이동하여 시나리오 확인
                 val team = dialogBinding.predictDialogTeamText.text.toString()
                 val rank = dialogBinding.predictDialogRankText.text.toString().toInt()
 
@@ -95,6 +120,13 @@ class RankFragment: Fragment(), OnTeamTouchListener{
         }
     }
 
+    /**
+     * 팀 아이템을 선택 시 호출
+     *
+     * 터치한 팀의 상세 정보를 보여주는 [TeamFragment]로 이동한다.
+     *
+     * @param[team] 터치한 팀의 [Team] 객체
+     */
     override fun onTouchItem(team: Team) {
         model.selectedTeam = team
         Navigation.findNavController(requireActivity(), R.id.hostFragment).navigate(R.id.action_rankFragment_to_teamFragment)

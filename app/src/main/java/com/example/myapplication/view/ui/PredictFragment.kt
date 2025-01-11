@@ -19,11 +19,27 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
+/**
+ * 응원하는 팀이 특정 순위 내에 진입할 시나리오를 계산하는 Fragment
+ *
+ * @property[model] 앱의 데이터를 공유하는 [MyViewModel] 객체
+ * @property[binding] PredictFragment의 ViewBinding 객체
+ * @property[args] PredictFragment로 전달된 argument. 지정된 팀과 순위
+ */
 class PredictFragment: Fragment() {
     private val model: MyViewModel by activityViewModels()
     private lateinit var binding: PredictFragmentBinding
     private val args: PredictFragmentArgs by navArgs()
 
+    /**
+     * PredictFragment의 View를 생성
+     *
+     * @param[inflater] View 생성을 위한 LayoutInflater 객체
+     * @param[container] 생성된 View의 부모 ViewGroup 객체
+     * @param[savedInstanceState] 이전 상태 정보를 저장한 Bundle 객체
+     *
+     * @return 생성된 View 객체
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
