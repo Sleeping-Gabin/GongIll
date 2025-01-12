@@ -163,8 +163,9 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.hostFragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.toolBar.setupWithNavController(navController, appBarConfiguration)
-        //binding.navBar.setupWithNavController(navController)
-        NavigationUI.setupWithNavController(binding.navBar, navController, false)
+        binding.navBar.setupWithNavController(navController)
+        //NavigationUI.setupWithNavController(binding.navBar, navController, false)
+
         //탭을 이동할 때, 해당 탭에 따른 UI 변경
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
