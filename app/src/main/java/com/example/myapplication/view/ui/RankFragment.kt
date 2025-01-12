@@ -78,8 +78,8 @@ class RankFragment: Fragment(), OnTeamTouchListener{
         val maxRemain = 12
         binding.rankItemHPredictBtn.setOnClickListener {
             val remain = model.currentPlayList.value!!.count { it.winIdx == null }
-            if (remain > 12)
-                model.toastObserver.value = "12개 이상의 경기가 남은 경우 가능성을 확인 할 수 없습니다."
+            if (remain > maxRemain)
+                model.toastObserver.value = "{$maxRemain}개 이상의 경기가 남은 경우 시나리오를 확인 할 수 없습니다."
             else
                 showPredictDialog()
         }
@@ -107,7 +107,7 @@ class RankFragment: Fragment(), OnTeamTouchListener{
         val builder = MaterialAlertDialogBuilder(requireContext())
             .setTitle(" ")
             .setNegativeButton("취소", null)
-            .setPositiveButton("가능성 확인하기", null)
+            .setPositiveButton("시나리오 확인하기", null)
             .setView(dialogBinding.root)
             .show()
 
