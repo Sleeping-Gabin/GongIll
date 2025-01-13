@@ -37,6 +37,8 @@ import kotlinx.coroutines.runBlocking
  * @property[currentPlayList] [selectedCurrentGroup] 의 경기 목록
  * @property[changePlayList] 변경된 경기의 목록
  * @property[changeTeamList] 변경된 팀의 목록
+ *
+ * @constructor 데이터베이스에서 데이터를 가져와 LiveData 객체에 저장
  */
 class MyViewModel(application: Application): AndroidViewModel(application) {
     private val database: CompetitionRepository = CompetitionRepository(application)

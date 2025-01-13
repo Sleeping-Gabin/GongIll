@@ -1,7 +1,7 @@
 package com.example.myapplication.objects
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PredictResult(
