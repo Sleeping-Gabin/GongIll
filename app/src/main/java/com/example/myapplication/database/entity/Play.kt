@@ -77,7 +77,7 @@ data class Play(
         winTeam = null
         roundCount = 0
 
-        changeData.changedData(this)
+        changeData.changedData()
 
         return changeData
     }
@@ -139,7 +139,7 @@ data class Play(
         updateWinTeam()
 
         //정보를 수정하는 데 사용할 ChangeData 객체
-        changeData.changedData(this)
+        changeData.changedData()
 
         return changeData
     }

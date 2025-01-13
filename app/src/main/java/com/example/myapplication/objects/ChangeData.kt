@@ -4,7 +4,7 @@ import com.example.myapplication.database.entity.Play
 import com.example.myapplication.database.entity.Team
 import kotlin.math.min
 
-class ChangeData(play: Play) {
+class ChangeData(val play: Play) {
     private var winChange = mutableListOf(0, 0)
     private var roundChange = mutableListOf(0, 0)
     private var pointChange = mutableListOf(0, 0)
@@ -12,10 +12,10 @@ class ChangeData(play: Play) {
     private var countChange = mutableListOf(0, 0)
 
     init {
-        previousData(play)
+        previousData()
     }
 
-    private fun previousData(play: Play) {
+    private fun previousData() {
         val winIdx = play.winIdx
         if (play.winIdx == null)
             return
@@ -38,7 +38,7 @@ class ChangeData(play: Play) {
         countChange[1] -= min(play.roundCount, 3)
     }
 
-    fun changedData(play: Play) {
+    fun changedData() {
         val winIdx = play.winIdx
         if (play.winIdx == null)
             return
@@ -62,7 +62,13 @@ class ChangeData(play: Play) {
     }
 
     fun changeTeamInfo(team1: Team?, team2: Team?) {
-        team1?.apply {
+        //잘못된 팀일 경우 변경하지 않음
+        if (team1?.groupName != play.group || team2?.groupName != play.group)
+            return
+        else if (team1.alias != play.team1 || team2.alias != play.team2)
+            return
+
+        team1.apply {
             win += winChange[0]
             lose += winChange[1]
             roundWin += roundChange[0]
@@ -71,7 +77,7 @@ class ChangeData(play: Play) {
             roundCount += countChange[0]
         }
 
-        team2?.apply {
+        team2.apply {
             win += winChange[1]
             lose += winChange[0]
             roundWin += roundChange[1]
