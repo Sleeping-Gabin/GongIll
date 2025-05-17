@@ -3,6 +3,7 @@ package com.example.myapplication.view.model
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.CompetitionRepository
@@ -52,16 +53,18 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
 
     lateinit var playList: LiveData<List<Play>>
 
+    val mediator = MediatorLiveData<Unit>()
+
     private var _groupTeamList: MutableLiveData<Map<Group, List<Team>>> = MutableLiveData()
     val groupTeamList: LiveData<Map<Group, List<Team>>>
         get() = _groupTeamList
 
     private var _groupPlayList: MutableLiveData<Map<Group, List<Play>>> = MutableLiveData()
-    private val groupPlayList: LiveData<Map<Group, List<Play>>>
+    val groupPlayList: LiveData<Map<Group, List<Play>>>
         get() = _groupPlayList
 
     private var _teamPlayList: MutableLiveData<Map<Team, List<Play>>> = MutableLiveData()
-    private val teamPlayList: LiveData<Map<Team, List<Play>>>
+    val teamPlayList: LiveData<Map<Team, List<Play>>>
         get() = _teamPlayList
 
     private var _categoryGroupList: MutableLiveData<Map<String, List<Group>>> = MutableLiveData()
@@ -69,8 +72,8 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
         get() = _categoryGroupList
 
 
-    //데이터베이스에서 데이터를 가져와 LiveData 객체에 저장
     init {
+        //데이터베이스에서 데이터를 가져와 LiveData 객체에 저장
         viewModelScope.launch {
             val categoryListJob = async { database.getCategoryList() }
             val groupListJob = async { database.getGroupList() }
@@ -81,6 +84,36 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
             groupList = groupListJob.await()
             teamList = teamListJob.await()
             playList = playListJob.await()
+        }
+
+        //LiveData가 변경될 때 관련된 변수들이 업데이트 되도록 함
+        mediator.apply {
+            addSource(categoryList) {
+                updateCurrentTeamAndPlay()
+                value = Unit
+            }
+
+            addSource(groupList) {
+                updateGroupPlayList()
+                updateGroupTeamList()
+                updateCategoryGroupList()
+                value = Unit
+            }
+
+            addSource(teamList) {
+                updateTeamPlayList()
+                updateGroupTeamList()
+                updateCurrentTeamAndPlay()
+                value = Unit
+            }
+
+            addSource(playList) {
+                updateTeamPlayList()
+                updateGroupPlayList()
+                updateCurrentTeamAndPlay()
+                rank()
+                value = Unit
+            }
         }
     }
 
@@ -128,7 +161,7 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
     /**
      * [selectedCurrentGroup]에 따라 [currentTeamList]와 [currentPlayList]를 업데이트한다.
      */
-    fun updateCurrentTeamAndPlay() {
+    private fun updateCurrentTeamAndPlay() {
         updateDatabase()
         _currentTeamList.value = groupTeamList.value?.get(selectedCurrentGroup) ?: listOf()
         _currentPlayList.value = groupPlayList.value?.get(selectedCurrentGroup) ?: listOf()
@@ -137,31 +170,31 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
     /**
      * [groupTeamList]를 업데이트한다.
      */
-    fun updateGroupTeamList() {
+    private fun updateGroupTeamList() {
         //그룹에 따라 팀을 분류
         if (!groupList.value.isNullOrEmpty() && !teamList.value.isNullOrEmpty()) {
-            _groupTeamList.value = teamList.value?.groupBy { t ->
-                groupList.value?.find { g -> g.name == t.groupName }!!
-            }
+            _groupTeamList.value = teamList.value
+                ?.filter { t -> groupList.value?.find { g -> g.name == t.groupName } != null }
+                ?.groupBy { t -> groupList.value?.find { g -> g.name == t.groupName }!! }
         }
     }
 
     /**
      * [groupPlayList]를 업데이트한다.
      */
-    fun updateGroupPlayList() {
+    private fun updateGroupPlayList() {
         //그룹에 따라 경기를 분류
         if (!groupList.value.isNullOrEmpty() && !playList.value.isNullOrEmpty()) {
-            _groupPlayList.value = playList.value?.groupBy { p ->
-                groupList.value?.find { g -> g.name == p.group }!!
-            }
+            _groupPlayList.value = playList.value
+                ?.filter { p -> groupList.value?.find { g -> g.name == p.group } != null }
+                ?.groupBy { p -> groupList.value?.find { g -> g.name == p.group }!! }
         }
     }
 
     /**
      * [teamPlayList]를 업데이트한다.
      */
-    fun updateTeamPlayList() {
+    private fun updateTeamPlayList() {
         //팀에 따라 팀이 속한 경기를 분류
         if (!playList.value.isNullOrEmpty() && !teamList.value.isNullOrEmpty()) {
             _teamPlayList.value = teamList.value?.associateWith {
@@ -173,7 +206,7 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
     /**
      * [categoryGroupList]를 업데이트
      */
-    fun updateCategoryGroupList() {
+    private fun updateCategoryGroupList() {
         //카테고리에 따라 그룹을 분류
         if (!groupList.value.isNullOrEmpty() && !categoryList.value.isNullOrEmpty()) {
             _categoryGroupList.value = groupList.value?.groupBy { g ->

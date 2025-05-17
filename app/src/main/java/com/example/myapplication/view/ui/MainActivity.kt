@@ -56,33 +56,6 @@ class MainActivity : AppCompatActivity() {
         model.toastObserver.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
-
-        //팀 리스트가 변경되면 관련 리스트를 업데이트
-        model.teamList.observe(this) {
-            model.updateGroupTeamList()
-            model.updateTeamPlayList()
-            model.updateCurrentTeamAndPlay()
-        }
-
-        //경기 리스트가 변경되면 관련 리스트를 업데이트
-        model.playList.observe(this) {
-            model.updateTeamPlayList()
-            model.updateGroupPlayList()
-            model.updateCurrentTeamAndPlay()
-        }
-
-        //카테고리 리스트가 변경되면 관련 리스트를 업데이트
-        model.categoryList.observe(this) {
-            model.updateCategoryGroupList()
-        }
-
-        //그룹 리스트가 변경되면 관련 리스트를 업데이트
-        model.groupList.observe(this) {
-            model.updateGroupPlayList()
-            model.updateGroupTeamList()
-            model.updateCategoryGroupList()
-        }
-
     }
 
     /**
