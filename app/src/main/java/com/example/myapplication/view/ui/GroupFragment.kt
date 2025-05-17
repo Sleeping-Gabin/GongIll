@@ -75,6 +75,10 @@ class GroupFragment : Fragment(), OnGroupTouchListener {
         model.categoryGroupList.observe(viewLifecycleOwner) {
             adapter.changeData(it)
         }
+
+        model.groupPlayList.observe(viewLifecycleOwner) {
+            adapter.changeData(model.categoryGroupList.value)
+        }
     }
 
     /**
