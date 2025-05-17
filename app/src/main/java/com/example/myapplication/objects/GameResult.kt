@@ -13,19 +13,20 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class GameResult(
-    val team1Idx: Int,
-    val team2Idx: Int,
-    val playNum: Int,
-    var winner: Int?): Parcelable {
-
-    /**
-     * 두 [GameResult]가 나타내는 경기가 같은지 비교하는 함수
-     *
-     * @param[other] 비교할 [GameResult]
-     *
-     * @return 두 [GameResult]가 나타내는 경기가 같은 경우 true, 그렇지 않은 경우 false. [winner]는 상관 없음
-     */
-    fun isSameGame(other: GameResult): Boolean {
-        return team1Idx == other.team1Idx && team2Idx == other.team2Idx && playNum == other.playNum
-    }
+	val team1Idx: Int,
+	val team2Idx: Int,
+	val playNum: Int,
+	var winner: Int?
+) : Parcelable {
+	
+	/**
+	 * 두 [GameResult]가 나타내는 경기가 같은지 비교하는 함수
+	 *
+	 * @param[other] 비교할 [GameResult]
+	 *
+	 * @return 두 [GameResult]가 나타내는 경기가 같은 경우 true, 그렇지 않은 경우 false. [winner]는 상관 없음
+	 */
+	fun isSameGame(other: GameResult): Boolean {
+		return team1Idx == other.team1Idx && team2Idx == other.team2Idx && playNum == other.playNum
+	}
 }

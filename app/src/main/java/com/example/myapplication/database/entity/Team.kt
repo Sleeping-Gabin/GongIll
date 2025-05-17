@@ -1,16 +1,20 @@
 package com.example.myapplication.database.entity
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 
-@Entity(foreignKeys = [ForeignKey(
-    entity = Group::class,
-    parentColumns = arrayOf("name"),
-    childColumns = arrayOf("group_name"),
-    onDelete = ForeignKey.CASCADE,
-    onUpdate = ForeignKey.CASCADE
-    )],
-    indices = [Index("group_name")],
-    primaryKeys = ["alias", "group_name"]
+@Entity(
+	foreignKeys = [ForeignKey(
+		entity = Group::class,
+		parentColumns = arrayOf("name"),
+		childColumns = arrayOf("group_name"),
+		onDelete = ForeignKey.CASCADE,
+		onUpdate = ForeignKey.CASCADE
+	)],
+	indices = [Index("group_name")],
+	primaryKeys = ["alias", "group_name"]
 )
 /**
  * 팀 데이터 클래스
@@ -30,30 +34,33 @@ import androidx.room.*
  * @constructor 새로운 팀 생성
  */
 data class Team(
-    val name: String,
-    @ColumnInfo("group_name") val groupName: String
+	val name: String,
+	@ColumnInfo("group_name") val groupName: String
 ) {
-    var alias = name
-
-    var rank: Int = 0
-    var win: Int = 0
-    var lose: Int = 0
-    @ColumnInfo(name="round_win") var roundWin: Int = 0
-    @ColumnInfo(name="round_count") var roundCount = 0
-    var point: Int = 0
-    @ColumnInfo(name="draw_round") var drawRound = 0
-
-    constructor(name: String, groupName: String, alias: String):
-            this(name, groupName) {
-                this.alias = alias
-            }
-
-    /**
-     * 팀의 정보를 문자열로 반환
-     *
-     * @return 팀의 별칭, 승리 횟수, 라운드 승점, 포인트 합계 정보의 문자열
-     */
-    override fun toString(): String {
-        return "${this.alias}: win ${this.win} / round win ${this.roundWin} / point ${this.point}"
-    }
+	var alias = name
+	
+	var rank: Int = 0
+	var win: Int = 0
+	var lose: Int = 0
+	@ColumnInfo(name = "round_win")
+	var roundWin: Int = 0
+	@ColumnInfo(name = "round_count")
+	var roundCount = 0
+	var point: Int = 0
+	@ColumnInfo(name = "draw_round")
+	var drawRound = 0
+	
+	constructor(name: String, groupName: String, alias: String) :
+					this(name, groupName) {
+		this.alias = alias
+	}
+	
+	/**
+	 * 팀의 정보를 문자열로 반환
+	 *
+	 * @return 팀의 별칭, 승리 횟수, 라운드 승점, 포인트 합계 정보의 문자열
+	 */
+	override fun toString(): String {
+		return "${this.alias}: win ${this.win} / round win ${this.roundWin} / point ${this.point}"
+	}
 }

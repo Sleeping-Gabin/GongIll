@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PredictResult(
-    val teams: List<String>,
-    var winScenario: List<Scenario>,
-    var roundScenario: List<Scenario>,
-    val reverse: Boolean
-): Parcelable
+	val teams: List<String>,
+	var winScenario: List<Scenario>,
+	var roundScenario: List<Scenario>,
+	val reverse: Boolean
+) : Parcelable

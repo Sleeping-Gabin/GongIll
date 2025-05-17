@@ -13,15 +13,15 @@ import androidx.room.PrimaryKey
  *
  * @constructor 새로운 그룹을 생성. 카테고리 미지정 시 "others"로 설정
  */
-@Entity (tableName = "groups")
-data class Group (
-    @PrimaryKey val name: String,
-    var playNum:Int = 1
+@Entity(tableName = "groups")
+data class Group(
+	@PrimaryKey val name: String,
+	var playNum: Int = 1
 ) {
-    var category: String = "others"
-
-    constructor(category: String, name: String, playNum: Int):
-            this(name, playNum) {
-                this.category = category
-            }
+	var category: String = "others"
+	
+	constructor(category: String, name: String, playNum: Int) :
+					this(name, playNum) {
+		this.category = category
+	}
 }

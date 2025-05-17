@@ -81,8 +81,8 @@ abstract class MyDatabase: RoomDatabase() {
 
 @Database(entities = [Group::class, Team::class, Play::class], version = 2, exportSchema = false)
 @TypeConverters(TypeConverter::class)
-abstract class MyDatabase: RoomDatabase() {
-    abstract fun groupDao(): GroupDao
-    abstract fun teamDao(): TeamDao
-    abstract fun playDao(): PlayDao
+abstract class MyDatabase : RoomDatabase() {
+	abstract fun groupDao(): GroupDao
+	abstract fun teamDao(): TeamDao
+	abstract fun playDao(): PlayDao
 }
