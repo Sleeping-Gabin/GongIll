@@ -50,14 +50,21 @@ class PredictRank(
 
     private  var reverse = false
 
+
     /**
-     * 가능한 모든 경기 시나리오를 재귀적으로 탐색하여 각 시나리오를 평가
+     * 가능한 모든 게임 결과 시나리오를 재귀적으로 탐색한다.
      *
-     * [remainPlay]의 모든 남은 경기에 대하여, 각 경기에서 어떤 팀이 이길 수 있는지에 대한 모든 가능성을 탐색한다.
-     * 모든 남은 경기의 결과를 포함한 [scenario]를 [평가][evaluateScenario]한다.
+     * 각 경기에 대해 가능한 모든 결과(팀1 승리 또는 팀2 승리)를 탐색하여 남은 경기의 결과를 시뮬레이션한다.
+     * 시나리오 트리를 순회하기 위해 깊이 우선 탐색(depth-first search) 방식을 사용한다.
      *
-     * @param scenario 현재 탐색 중인 [시나리오][Scenario]
-     * @param depth 재귀 호출의 깊이. 현재 탐색 중인 경기의 인덱스
+     * [depth]가 [remainPlay]의 크기와 같으면 모든 남은 경기를 고려했음을 의미하므로,
+     * [evaluateScenario] 함수로 현재 시나리오에서의 최종 순위를 평가한다.
+     *
+     * 그렇지 않은 경우, 다음 경기에서 팀1이 이기는 결과와 팀2가 이기는 결과를 각각 시나리오에 추가하고
+     * 재귀적으로 [exploreScenarios]를 호출한다.
+     *
+     * @param[scenario] 현재 탐색 중인 시나리오. 지금까지 누적된 경기 결과 목록을 포함.
+     * @param[depth] 현재 탐색 깊이. [remainPlay] 리스트에서 고려 중인 경기의 인덱스.
      */
     private fun exploreScenarios(
         scenario: Scenario,
