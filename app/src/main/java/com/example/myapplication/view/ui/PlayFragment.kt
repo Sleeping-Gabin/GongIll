@@ -225,7 +225,6 @@ class PlayFragment: Fragment(), OnPointTouchListener {
      */
     override fun onPause() {
         model.updateDatabase()
-        model.rank()
         super.onPause()
     }
 }
