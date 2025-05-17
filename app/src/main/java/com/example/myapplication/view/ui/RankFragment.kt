@@ -74,12 +74,12 @@ class RankFragment: Fragment(), OnTeamTouchListener{
             adapter.changeData(it.sortedBy { play -> play.rank })
         }
 
-        //남은 경기 수가 12경기 미만일 경우 Diolog 표시
+        //남은 경기 수가 범위 밖일 경우 Diolog 표시
         val maxRemain = 12
         binding.rankItemHPredictBtn.setOnClickListener {
             val remain = model.currentPlayList.value!!.count { it.winIdx == null }
-            if (remain > maxRemain)
-                model.toastObserver.value = "{$maxRemain}개 이상의 경기가 남은 경우 시나리오를 확인 할 수 없습니다."
+            if (remain >= maxRemain)
+                model.toastObserver.value = "${maxRemain}개 이상의 경기가 남은 경우 시나리오를 확인 할 수 없습니다."
             else
                 showPredictDialog()
         }
