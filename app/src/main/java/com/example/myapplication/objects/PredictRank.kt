@@ -133,6 +133,12 @@ class PredictRank(
 		var highRndTeamCount = sameWinMinRnds.count { it > targetMaxRnd }
 		var lowRndTeamCount = sameWinMaxRnds.count { it < targetMinRnd }
 		
+		// 승리 수가 같은 팀이 하나면 승점 비교의 의미 없음
+		if (sameWinCount == 1) {
+			highRndTeamCount = 0
+			lowRndTeamCount = 0
+		}
+		
 		// 타겟 팀보다 높은 순위의 팀이 목표 순위보다 더 많으면 실패
 		if (highTeamCount + highRndTeamCount >= targetRank) {
 			addScenario(scenario, "fail")
@@ -177,8 +183,8 @@ class PredictRank(
 			.filter { (it.team1Idx == targetIdx && it.team2Idx == opponentIdx) || (it.team2Idx == targetIdx && it.team1Idx == opponentIdx) }
 			.map { it.winner == targetIdx }
 		
-		val winCount = targetTeamWins.count { true }
-		val loseCount = targetTeamWins.count { false }
+		val winCount = targetTeamWins.count { it }
+		val loseCount = targetTeamWins.count { !it }
 		
 		when {
 			//목표 팀의 승리 수가 많으면 성공
