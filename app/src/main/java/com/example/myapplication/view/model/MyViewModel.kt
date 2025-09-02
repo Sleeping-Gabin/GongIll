@@ -6,10 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.room.Room
 import com.example.myapplication.CompetitionRepository
+import com.example.myapplication.database.MIGRATION_2_3
+import com.example.myapplication.database.MyDatabase
 import com.example.myapplication.database.entity.Group
 import com.example.myapplication.database.entity.Play
 import com.example.myapplication.database.entity.Team
+import com.example.myapplication.objects.RankRule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -42,16 +46,16 @@ import kotlinx.coroutines.runBlocking
  * @constructor 데이터베이스에서 데이터를 가져와 LiveData 객체에 저장
  */
 class MyViewModel(application: Application) : AndroidViewModel(application) {
-	private val database: CompetitionRepository = CompetitionRepository(application)
+	private val database by lazy {
+		CompetitionRepository(application)
+	}
+	
 	val toastObserver: MutableLiveData<String> = MutableLiveData()
 	
-	lateinit var categoryList: LiveData<List<String>>
-	
-	lateinit var groupList: LiveData<List<Group>>
-	
-	lateinit var teamList: LiveData<List<Team>>
-	
-	lateinit var playList: LiveData<List<Play>>
+	val categoryList: LiveData<List<String>> = database.getCategoryList()
+	val groupList: LiveData<List<Group>> = database.getGroupList()
+	val teamList: LiveData<List<Team>> = database.getTeamList()
+	val playList: LiveData<List<Play>> = database.getPlayList()
 	
 	val mediator = MediatorLiveData<Unit>()
 	
@@ -74,22 +78,11 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 	
 	init {
 		//데이터베이스에서 데이터를 가져와 LiveData 객체에 저장
-		viewModelScope.launch {
-			val categoryListJob = async { database.getCategoryList() }
-			val groupListJob = async { database.getGroupList() }
-			val teamListJob = async { database.getTeamList() }
-			val playListJob = async { database.getPlayList() }
-			
-			categoryList = categoryListJob.await()
-			groupList = groupListJob.await()
-			teamList = teamListJob.await()
-			playList = playListJob.await()
-		}
-		
+
 		//LiveData가 변경될 때 관련된 변수들이 업데이트 되도록 함
 		mediator.apply {
 			addSource(categoryList) {
-				updateCurrentTeamAndPlay()
+				updateCategoryGroupList()
 				value = Unit
 			}
 			
@@ -320,18 +313,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 		
 		rankedList.forEach { list -> //승리 수와 패배 수가 같은 팀들의 리스트
 			if (list.size == 2) { //승리 수가 같은 팀이 두 팀이면 승패 -> 라운드 승점 -> 포인트 -> 무승부 순으로 정렬
-				list.sortWith(Comparator<Team> { team1, team2 ->
-					runBlocking {
-						database.whoWin(
-							team1,
-							team2
-						)
-					}
-				}
+				list.sortWith(Comparator<Team> { team1, team2 -> runBlocking { database.whoWin(team1,	team2) } }
 					.thenByDescending { it.roundWin }
 					.thenByDescending { it.point.toFloat() / it.roundCount }
 					.thenByDescending { it.drawRound })
-				
 			} else { //승리 수가 같은 팀이 3팀 이상이면 라운드 승점 -> 포인트 -> 무승부 순으로 정렬
 				list.sortWith(compareByDescending<Team> { it.roundWin }
 					.thenByDescending { it.point.toFloat() / it.roundCount }

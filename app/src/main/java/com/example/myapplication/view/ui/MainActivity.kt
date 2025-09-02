@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.edit
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -41,9 +42,16 @@ class MainActivity : AppCompatActivity() {
 	 * @param[savedInstanceState] 이전 상태를 저장한 Bundle 객체
 	 */
 	override fun onCreate(savedInstanceState: Bundle?) {
+		installSplashScreen()
+		setTheme(R.style.AppTheme)
+		
+		
 		super.onCreate(savedInstanceState)
 		binding = ActivityMainBinding.inflate(layoutInflater)
 		setContentView(binding.root)
+		
+		model.mediator.observe(this) {
+		}
 		
 		//이전 상태를 저장
 		//이전에 선택한 그룹: "group"
@@ -77,7 +85,8 @@ class MainActivity : AppCompatActivity() {
 		
 		//그룹 리스트가 변경될 때마다 목록을 업데이트
 		model.groupList.observe(this) {
-			val list = it.map { g -> if (g.category != "others") g.category + " - " + g.name else g.name }
+			//val list = it.map { g -> if (g.category != "others") g.category + " - " + g.name else g.name }
+			val list = it?.map { group -> group.name } ?: arrayListOf()
 			val currentText = binding.selectGroupText.text.toString()
 			
 			//그룹 선택 목록 업데이트
