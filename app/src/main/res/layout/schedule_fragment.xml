@@ -19,6 +19,7 @@
             style="@style/Widget.Material3.Chip.Filter"
             app:checkedIconEnabled="false"
             android:checked="true"
+            android:textAppearance="@style/chipTextAppearance"
             android:text="모든 경기"/>
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_finish"
@@ -26,6 +27,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.Material3.Chip.Filter"
             app:checkedIconEnabled="false"
+            android:textAppearance="@style/chipTextAppearance"
             android:text="진행한 경기"/>
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_yet"
@@ -33,6 +35,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.Material3.Chip.Filter"
             app:checkedIconEnabled="false"
+            android:textAppearance="@style/chipTextAppearance"
             android:text="남은 경기"/>
     </com.google.android.material.chip.ChipGroup>
     <FrameLayout

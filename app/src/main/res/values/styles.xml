@@ -18,4 +18,8 @@
     <style name="Widget.App.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
         <item name="backgroundTint">@color/outlined_button_background_color</item>
     </style>
+
+    <style name="chipTextAppearance" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/suite_variable</item>
+    </style>
 </resources>

@@ -1,12 +1,17 @@
 package com.example.myapplication.view.ui
 
 import android.app.AlertDialog
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.NumberPicker
 import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -52,6 +57,10 @@ class PlayFragment : Fragment(), OnPointTouchListener {
 		savedInstanceState: Bundle?
 	): View {
 		binding = PlayFragmentBinding.inflate(inflater)
+		
+		val typeface = ResourcesCompat.getFont(requireContext(), R.font.suite_variable)
+		binding.playCollapsingToolBar.setCollapsedTitleTypeface(typeface)
+		binding.playCollapsingToolBar.setExpandedTitleTypeface(typeface)
 		
 		return binding.root
 	}
