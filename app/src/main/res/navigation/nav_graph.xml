@@ -6,7 +6,7 @@
     app:startDestination="@id/scheduleFragment">
     <fragment
         android:id="@+id/groupFragment"
-        android:name="com.example.myapplication.view.ui.GroupFragment"
+        android:name="com.gabin.gongill.view.ui.GroupFragment"
         android:label="GroupFragment"
         tools:layout="@layout/group_fragment">
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/rankFragment"
-        android:name="com.example.myapplication.view.ui.RankFragment"
+        android:name="com.gabin.gongill.view.ui.RankFragment"
         android:label="RankFragment"
         tools:layout="@layout/rank_fragment">
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/scheduleFragment"
-        android:name="com.example.myapplication.view.ui.ScheduleFragment"
+        android:name="com.gabin.gongill.view.ui.ScheduleFragment"
         android:label="ScheduleFragment"
         tools:layout="@layout/schedule_fragment">
         <action
@@ -44,18 +44,18 @@
     </fragment>
     <fragment
         android:id="@+id/playFragment"
-        android:name="com.example.myapplication.view.ui.PlayFragment"
+        android:name="com.gabin.gongill.view.ui.PlayFragment"
         android:label="PlayFragment"
         tools:layout="@layout/play_fragment">
     </fragment>
     <fragment
         android:id="@+id/teamFragment"
-        android:name="com.example.myapplication.view.ui.TeamFragment"
+        android:name="com.gabin.gongill.view.ui.TeamFragment"
         android:label="TeamFragment"
         tools:layout="@layout/team_fragment"/>
     <fragment
         android:id="@+id/groupItemFragment"
-        android:name="com.example.myapplication.view.ui.GroupDetailFragment"
+        android:name="com.gabin.gongill.view.ui.GroupDetailFragment"
         android:label="GroupItemFragment" >
         <action
             android:id="@+id/action_groupItemFragment_to_teamFragment"
@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/predictFragment"
-        android:name="com.example.myapplication.view.ui.PredictFragment"
+        android:name="com.gabin.gongill.view.ui.PredictFragment"
         android:label="PredictFragment">
         <argument
             android:name="team"
@@ -84,11 +84,12 @@
     </fragment>
     <fragment
         android:id="@+id/predictResultFragment"
-        android:name="com.example.myapplication.view.ui.PredictResultFragment"
-        android:label="PredictResultFragment">
+        android:name="com.gabin.gongill.view.ui.PredictResultFragment"
+        android:label="PredictResultFragment"
+        tools:layout="@layout/predict_result_fragment">
         <argument
             android:name="predictResult"
-            app:argType="com.example.myapplication.objects.PredictResult" />
+            app:argType="com.gabin.gongill.objects.PredictResult" />
         <argument
             android:name="team"
             app:argType="string" />

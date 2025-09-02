@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">공일</string>
     <string name="title_schedule">경기</string>
     <string name="title_team">순위</string>
     <string name="title_group">그룹</string>

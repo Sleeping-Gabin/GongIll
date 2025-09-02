@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.myapplication'
+    namespace 'com.gabin.gongill'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.myapplication"
+        applicationId "com.gabin.gongill"
         minSdk 31
         targetSdk 33
         versionCode 1
