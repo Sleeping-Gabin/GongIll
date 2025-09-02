@@ -40,7 +40,7 @@ interface PlayDao {
 	@Query("SELECT play.* From play WHERE group_name = :group ORDER BY group_order")
 	suspend fun findByGroup(group: String): List<Play>
 	
-	@Query("SELECT DISTINCT groups.*, play.* From play JOIN groups ON groups.name = play.group_name ORDER BY group_order")
+	@Query("SELECT DISTINCT `groups`.*, play.* From play JOIN `groups` ON `groups`.name = play.group_name ORDER BY group_order")
 	fun getGroupAndPlays(): LiveData<Map<Group, List<Play>>>
 	
 	@Query("SELECT DISTINCT team.*, play.* From play JOIN team ON team.group_name = play.group_name AND (team.alias = play.team1 OR team.alias = play.team2)")

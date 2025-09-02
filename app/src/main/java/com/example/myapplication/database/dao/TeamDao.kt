@@ -30,7 +30,7 @@ interface TeamDao {
 	@Query("SELECT * FROM team WHERE group_name = :groupName")
 	suspend fun findByGroup(groupName: String): List<Team>
 	
-	@Query("SELECT groups.*, team.* FROM team JOIN groups ON groups.name = team.group_name")
+	@Query("SELECT `groups`.*, team.* FROM team JOIN `groups` ON `groups`.name = team.group_name")
 	fun getGroupAndTeams(): LiveData<Map<Group, List<Team>>>
 	
 	@Query("SELECT group_name FROM team WHERE name = :teamName")

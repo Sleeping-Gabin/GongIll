@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.room.Room
+import com.example.myapplication.database.MIGRATION_2_3
 import com.example.myapplication.database.MyDatabase
 import com.example.myapplication.database.entity.Group
 import com.example.myapplication.database.entity.Play
@@ -24,6 +25,7 @@ class CompetitionRepository(application: Application) {
 	private val db = Room.databaseBuilder(
 		application.applicationContext, MyDatabase::class.java, "database"
 	)
+		.addMigrations(MIGRATION_2_3)
 		.build()
 	
 	/**

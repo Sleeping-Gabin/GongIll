@@ -1,5 +1,7 @@
 package com.example.myapplication.database
 
+import androidx.room.TypeConverters
+import com.example.myapplication.objects.RankRule
 import org.json.JSONArray
 
 class TypeConverter {
@@ -43,5 +45,15 @@ class TypeConverter {
 			list2d.add(list)
 		}
 		return list2d.toList()
+	}
+	
+	@androidx.room.TypeConverter
+	fun rankRuleToString(rule: RankRule): String {
+		return rule.name
+	}
+	
+	@androidx.room.TypeConverter
+	fun stringToRankRule(string: String): RankRule {
+		return RankRule.valueOf(string)
 	}
 }

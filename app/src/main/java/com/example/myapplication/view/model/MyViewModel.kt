@@ -295,7 +295,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 				cancel()
 			}
 			
-			val newGroup = Group(groupName, playNum)
+			val newGroup = Group(groupName, playNum, RankRule.COA8)
 			if (category.isNotBlank())
 				newGroup.category = category
 			
