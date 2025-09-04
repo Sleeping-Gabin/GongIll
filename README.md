@@ -4,7 +4,7 @@
 <br>
 
 ### 기획서
-[기획서](https://github.com/Sleeping-Gabin/GongIll/raw/main/ul_plan.pdf)  
+[기획서](https://github.com/Sleeping-Gabin/GongIll/raw/main/ui_plan.pdf)  
 <br>
 
 ### 사용 기술
