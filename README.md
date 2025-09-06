@@ -3,17 +3,13 @@
 응원하는 팀이 목표 순위에 들 수 있는 시나리오를 탐색하는 앱  
 <br>
 
-### 기획서
-[기획서](https://github.com/Sleeping-Gabin/GongIll/raw/main/ui_plan.pdf)  
-<br>
-
 ### 사용 기술
 ![kotlin](https://img.shields.io/badge/kotlin-7F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![android studio](https://img.shields.io/badge/android_studio-3DDC84.svg?style=for-the-badge&logo=androidstudio&logoColor=white)  
 <br>
 
 ### 프로젝트 기간
-2023.03 ~ 2024.11  
+2023.03 ~ 2024.11
 
 <br><br>
 
@@ -28,7 +24,7 @@
 
 ## 기능
 ### 경기 일정 필터링
-![필터링](https://github.com/user-attachments/assets/05fea455-2be2-4c6e-bcca-087fb4bda1c1)
+필터링 칩을 선택하면 경기 일정을 필터링 해 보여준다.
 
 <details>
 <summary>코드 보기</summary>
@@ -66,13 +62,15 @@ fun filterData() {
 ```
 </details>
 
-필터링 칩을 선택하면 경기 일정을 필터링 해 보여준다.  
+<div>
+	<img src="https://github.com/user-attachments/assets/05fea455-2be2-4c6e-bcca-087fb4bda1c1" width="200"/>
+</div>
 <br>
 
 ### 일정 터치, 드래그, 슬라이드
-|터치   |드래그   |슬라이드   |
-|:---:|:---:|:---:|
-|![터치](https://github.com/user-attachments/assets/557e53c0-59b9-4e8f-9391-6b6f08c45578) |![드래그](https://github.com/user-attachments/assets/09c76186-3d2b-491a-9dca-a888b14ee30f) |![슬라이드](https://github.com/user-attachments/assets/4c67d945-995f-487d-b360-7adb9867214f) |
+일정을 터치하면 라운드 점수를 확인할 수 있다.  
+일정을 드래그 해 순서를 변경할 수 있다.  
+일정을 왼쪽으로 슬라이드 하면 점수 수정 화면으로 이동할 수 있다.
 
 <details>
 <summary>코드 보기</summary>
@@ -165,13 +163,16 @@ class SimpleScheduleCallback(private val adapter: ScheduleAdapter, context: Cont
 ```
 </details>
 
-일정을 터치하면 라운드 점수를 확인할 수 있다.  
-일정을 드래그 해 순서를 변경할 수 있다.  
-일정을 왼쪽으로 슬라이드 하면 점수 수정 화면으로 이동할 수 있다.  
+|터치   |드래그   |슬라이드   |
+|:---:|:---:|:---:|
+|<img src="https://github.com/user-attachments/assets/557e53c0-59b9-4e8f-9391-6b6f08c45578" width="200"/> |<img src="https://github.com/user-attachments/assets/09c76186-3d2b-491a-9dca-a888b14ee30f" width="200"/> |<img src="https://github.com/user-attachments/assets/4c67d945-995f-487d-b360-7adb9867214f" width="200"/> |
+
 <br>
 
 ### 점수 수정
-![점수 수정](https://github.com/user-attachments/assets/f3f2573d-70d6-4d03-ba6c-52b409a5ca38)
+`NumberPicker`로 점수를 수정한다.  
+한 팀의 점수를 변경하면 반대 팀의 점수가 자동으로 반영된다.  
+입력한 점수에 따라 연장전까지 입력란이 증가한다.
 
 <details>
 <summary>코드 보기</summary>
@@ -269,13 +270,15 @@ class ChangeData(val play: Play) {
 ```
 </details>
 
-`NumberPicker`로 점수를 수정한다.  
-한 팀의 점수를 변경하면 반대 팀의 점수가 자동으로 반영된다.  
-입력한 점수에 따라 연장전까지 입력란이 증가한다.  
+<div>
+	<img src="https://github.com/user-attachments/assets/f3f2573d-70d6-4d03-ba6c-52b409a5ca38" width="200"/>
+</div>
 <br>
 
 ### 시나리오 분석
-![시나리오 분석](https://github.com/user-attachments/assets/80683f8c-a778-4c04-8ee9-bb44e18d4d7a)
+응원하는 팀과 목표 순위를 지정하면 해당 순위 내에 들기 위한 시나리오(남은 경기들을 진행했을 때 발생할 수 있는 순위 결과)를 탐색한다.  
+가능한 모든 결과를 탐색하고, 병합 가능한 시나리오를 병합한다.  
+분석 결과에 따라 확정적으로 성공하는 경우와 라운드 비교가 필요한 경우를 나눠서 표시한다.
 
 <details>
 <summary>코드 보기</summary>
@@ -364,13 +367,14 @@ private fun mergeDiffOne(scenarios: HashSet<Scenario>, type: String): HashSet<Sc
 ```
 </details>
 
-응원하는 팀과 목표 순위를 지정하면 해당 순위 내에 들기 위한 시나리오(남은 경기들을 진행했을 때 발생할 수 있는 순위 결과)를 탐색한다.  
-가능한 모든 결과를 탐색하고, 병합 가능한 시나리오를 병합한다.  
-분석 결과에 따라 확정적으로 성공하는 경우와 라운드 비교가 필요한 경우를 나눠서 표시한다.  
+<div>
+	<img src="https://github.com/user-attachments/assets/80683f8c-a778-4c04-8ee9-bb44e18d4d7a" width="200"/>
+</div>
 <br>
 
 ### 팀 정보 수정 / 삭제
-![팀 수정](https://github.com/user-attachments/assets/3aa682e9-137c-45ec-852c-1f0000f4f270)
+팀 정보를 수정, 삭제 할 수 있다.  
+기본적으로 팀의 별칭은 팀의 이름을 자동으로 따라간다.
 
 <details>
 <summary>코드 보기</summary>
@@ -451,12 +455,14 @@ fun changeTeamName(team: Team, teamName: String, teamAlias: String) {
 ```
 </details>
 
-팀 정보를 수정, 삭제 할 수 있다.  
-기본적으로 팀의 별칭은 팀의 이름을 자동으로 따라간다.  
+<div>
+	<img src="https://github.com/user-attachments/assets/3aa682e9-137c-45ec-852c-1f0000f4f270" width="200"/>
+</div>
 <br>
 
 ### 그룹/팀 추가
-![그룹 추가](https://github.com/user-attachments/assets/3db06865-716b-4a86-9934-84f56ce4ed1d)
+카테고리를 지정하고 그룹을 추가한다.  
+각 그룹에 팀을 추가할 수 있다.
 
 <details>
 <summary>코드 보기</summary>
@@ -514,12 +520,13 @@ fun addGroup(groupName: String, playNum: Int, category: String) {
 ```
 </details>
 
-카테고리를 지정하고 그룹을 추가한다.  
-각 그룹에 팀을 추가할 수 있다.  
+<div>
+	<img src="https://github.com/user-attachments/assets/3db06865-716b-4a86-9934-84f56ce4ed1d" width="200"/>
+</div>
 <br>
 
 ### 그룹 정보 수정 / 삭제
-![그룹 삭제](https://github.com/user-attachments/assets/ef023ee0-e208-4e1a-85b0-ef8544d41ac5)
+그룹 정보를 수정하거나 삭제할 수 있다.
 
 <details>
 <summary>코드 보기</summary>
@@ -549,12 +556,16 @@ fun deleteGroup(group: Group) {
 ```
 </details>
 
-그룹 정보를 수정하거나 삭제할 수 있다.  
+<div>
+	<img src="https://github.com/user-attachments/assets/ef023ee0-e208-4e1a-85b0-ef8544d41ac5" width="200"/>
+</div>
 
 <br><br>
 
 ## 구현 내용
 ### Room 데이터베이스
+Room 데이터베이스로 경기, 팀, 그룹 데이터를 저장한다.
+
 <details>
 <summary>코드 보기</summary>
 
@@ -562,15 +573,15 @@ fun deleteGroup(group: Group) {
 //com.gabin.gongill.database.entity.Team
 
 @Entity(
-foreignKeys = [ForeignKey(
-	entity = Group::class,
-	parentColumns = arrayOf("name"),
-	childColumns = arrayOf("group_name"),
-	onDelete = ForeignKey.CASCADE,
-	onUpdate = ForeignKey.CASCADE
-)],
-indices = [Index("group_name")],
-primaryKeys = ["alias", "group_name"]
+	foreignKeys = [ForeignKey(
+		entity = Group::class,
+		parentColumns = arrayOf("name"),
+		childColumns = arrayOf("group_name"),
+		onDelete = ForeignKey.CASCADE,
+		onUpdate = ForeignKey.CASCADE
+	)],
+	indices = [Index("group_name")],
+	primaryKeys = ["alias", "group_name"]
 )
 
 data class Team(
@@ -594,7 +605,7 @@ data class Team(
 					this(name, groupName) {
 		this.alias = alias
 	}
-  
+	
 	override fun toString(): String {
 		return "${this.alias}: win ${this.win} / round win ${this.roundWin} / point ${this.point}"
 	}
@@ -608,9 +619,9 @@ data class Team(
 interface TeamDao {
 	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	suspend fun insertTeam(team: Team): Long
-		
+	
 	@Update
-	suspend fun updateTeam(team: Team)		
+	suspend fun updateTeam(team: Team)
 	
 	@Delete
 	suspend fun deleteTeam(team: Team)
@@ -649,16 +660,16 @@ class CompetitionRepository(application: Application) {
 	fun getTeamList(): LiveData<List<Team>> {
 		return db.teamDao().getAllTeams()
 	}
-  
-    // ...
+	
+	// ...
 }
 ```
 </details>
-
-Room 데이터베이스로 경기, 팀, 그룹 데이터를 저장한다.  
 <br>
 
 ### ViewModel로 데이터 공유
+`ViewModel`로 `Fragment`간 데이터를 공유하였다.
+
 <details>
 <summary>코드 보기</summary>
 
@@ -743,7 +754,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 	
 	val changePlayList: ArrayList<Play> = arrayListOf()
 	val changeTeamList: ArrayList<Team> = arrayListOf()
-  
+	
 	fun selectGroup(name: String) {
 		selectedCurrentGroup = groupList.value?.find { it.name == name }
 		updateCurrentTeamAndPlay()
@@ -753,29 +764,25 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 }
 ```
 </details>
-
-`ViewModel`로 `Fragment`간 데이터를 공유하였다.  
 <br>
 
 ### LiveData로 UI 유지
+`LiveData`를 `observe`하여 변경되는 데이터를 UI에 반영하고, 유지되도록 했다.
+
 <details>
 <summary>코드 보기</summary>
 
 ```kotlin
 //com.gabin.gongill.view.ui.RankFragment
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {		
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 	// ...
 	
-    model.currentTeamList.observe(viewLifecycleOwner) {
-        adapter.changeData(it.sortedBy { play -> play.rank })
-    }
-    
-    // ...
+	model.currentTeamList.observe(viewLifecycleOwner) {
+		adapter.changeData(it.sortedBy { play -> play.rank })
+	}
+	
+	// ...
 }
 ```
 </details>
-
-`LiveData`를 `observe`하여 변경되는 데이터를 UI에 반영하고, 유지되도록 했다.
-
-<br><br>
