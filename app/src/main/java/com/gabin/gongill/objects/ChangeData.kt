@@ -41,8 +41,8 @@ class ChangeData(val play: Play) {
 		
 		winChange[winIdx!!] -= 1 //기존 승리 팀의 승리 횟수 감소
 		
-		val round1 = play.roundResult.count { result -> result == 0 } //team1이 이긴 라운드 수 (연장 포함)
-		val round2 = play.roundResult.count { result -> result == 1 } //team2가 이긴 라운드 수
+		val round1 = play.roundResult.take(3).count { result -> result == 0 } //team1이 이긴 라운드 수
+		val round2 = play.roundResult.take(3).count { result -> result == 1 } //team2가 이긴 라운드 수
 		roundChange[0] -= round1 - round2 //라운드 승점(승리 라운드 수 - 패배 라운드 수) 제거
 		roundChange[1] -= round2 - round1
 		
@@ -70,8 +70,8 @@ class ChangeData(val play: Play) {
 		
 		winChange[winIdx!!] += 1 //승리 팀의 승리 횟수 증가
 		
-		val round1 = play.roundResult.count { result -> result == 0 } //team1의 승리 라운드 수 (연장 포함)
-		val round2 = play.roundResult.count { result -> result == 1 }  //team2의 승리 라운드 수
+		val round1 = play.roundResult.take(3).count { result -> result == 0 } //team1의 승리 라운드 수
+		val round2 = play.roundResult.take(3).count { result -> result == 1 }  //team2의 승리 라운드 수
 		roundChange[0] += round1 - round2 //실질 승리 수 (승리 라운드 수 - 패배 라운드 수)
 		roundChange[1] += round2 - round1
 		
