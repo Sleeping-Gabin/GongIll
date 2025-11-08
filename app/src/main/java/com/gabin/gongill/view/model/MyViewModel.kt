@@ -72,6 +72,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 	val categoryGroupList: LiveData<Map<String, List<Group>>>
 		get() = _categoryGroupList
 	
+	var isInitialized = false
+	
 	
 	init {
 		//데이터베이스에서 데이터를 가져와 LiveData 객체에 저장
@@ -80,6 +82,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 		mediator.apply {
 			addSource(categoryList) {
 				updateCategoryGroupList()
+				checkInitialized()
 				value = Unit
 			}
 			
@@ -87,6 +90,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 				updateGroupPlayList()
 				updateGroupTeamList()
 				updateCategoryGroupList()
+				checkInitialized()
 				value = Unit
 			}
 			
@@ -94,6 +98,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 				updateTeamPlayList()
 				updateGroupTeamList()
 				updateCurrentTeamAndPlay()
+				checkInitialized()
 				value = Unit
 			}
 			
@@ -101,6 +106,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 				updateTeamPlayList()
 				updateGroupPlayList()
 				updateCurrentTeamAndPlay()
+				checkInitialized()
 				rank()
 				value = Unit
 			}
@@ -206,6 +212,16 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 		}
 	}
 	
+	private fun checkInitialized() {
+		if (!isInitialized && !groupList.value.isNullOrEmpty()
+			&& !teamList.value.isNullOrEmpty() && !playList.value.isNullOrEmpty()) {
+			isInitialized = true
+			groupList.value?.forEach { group ->
+				recalculateAllTeamData(group)
+			}
+		}
+	}
+	
 	
 	/**
 	 * 데이터베이스에 새로운 팀 추가
@@ -264,8 +280,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 	 *
 	 * @return 별칭이 [alias]인 팀의 [Team] 객체
 	 */
-	fun getTeamWithAlias(alias: String): Team {
-		return teamList.value?.find { it.groupName == selectedCurrentGroup?.name && it.alias == alias }!!
+	fun getTeamWithAlias(alias: String, groupName: String = selectedCurrentGroup?.name!!): Team {
+		return teamList.value?.find { it.groupName == groupName && it.alias == alias }!!
 	}
 	
 	/**
@@ -414,5 +430,39 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 	 */
 	fun getGroupTeam(group: Group): List<Team> {
 		return groupTeamList.value?.get(group) ?: listOf()
+	}
+	
+	/**
+	 * [group]의 팀의 데이터를 재계산
+	 *
+	 * @param[group] 재계산할 그룹의 [Group] 객체
+	 */
+	fun recalculateAllTeamData(group: Group) {
+		val teamList = getGroupTeam(group)
+		val playList = getGroupPlay(group).filter({ play -> play.winIdx != null })
+
+		for (team in teamList) {
+			team.clear()
+			changeTeamList.add(team)
+			println(team.toString())
+		}
+		
+		for (play in playList) {
+			val team1 = getTeamWithAlias(play.team1, group.name)
+			val team2 = getTeamWithAlias(play.team2, group.name)
+			val roundResult = play.roundResult.toList()
+			val pointResult = play.pointResult.toList()
+			val roundCount = play.roundCount
+			
+			play.clear()
+			for (round in 0 until roundCount) {
+				val result = play.changeResult(round, pointResult[round], roundResult[round])
+				result.changeTeamInfo(team1, team2)
+			}
+			
+			println(team1.toString())
+			println(team2.toString())
+			println()
+		}
 	}
 }

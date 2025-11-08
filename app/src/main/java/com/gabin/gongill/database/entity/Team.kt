@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import com.gabin.gongill.objects.ChangeData
 
 @Entity(
 	foreignKeys = [ForeignKey(
@@ -53,6 +54,19 @@ data class Team(
 	constructor(name: String, groupName: String, alias: String) :
 					this(name, groupName) {
 		this.alias = alias
+	}
+	
+	/**
+	 * 팀 데이터를 초기화한다.
+	 */
+	fun clear() {
+		rank = 0
+		win = 0
+		lose = 0
+		roundWin = 0
+		roundCount = 0
+		point = 0
+		drawRound = 0
 	}
 	
 	/**
